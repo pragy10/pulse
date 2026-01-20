@@ -92,8 +92,6 @@ Citizens performing sustainable actions (waste reduction, renewable energy adopt
 
 ---
 
----
-
 ## 📂 Project Structure
 
 ```
@@ -413,64 +411,10 @@ Open browser: `http://localhost:5173`
 
 ---
 
-## 📸 Screenshots for Assignment
-
-Take screenshots of:
-1. ✅ Terminal showing `docker-compose up` success
-2. ✅ Browser showing app running on `localhost:5173`
-3. ✅ GitHub repo page showing branches
-4. ✅ This README.md file on GitHub
-5. ✅ Docker Desktop showing running containers
-
----
-
-## 🐛 Troubleshooting
-
-### Port already in use
-```bash
-# Kill process using port 5000 (macOS/Linux)
-lsof -ti:5000 | xargs kill -9
-
-# Windows
-netstat -ano | findstr :5000
-taskkill /PID <PID> /F
-
-# Or change port in backend/.env
-PORT=5001
-```
-
-### MongoDB connection failed
-```bash
-# Restart MongoDB container
-docker-compose restart mongodb
-
-# Check MongoDB logs
-docker-compose logs mongodb
-```
-
-### AI Service not responding
-```bash
-# Rebuild AI service
-docker-compose up --build ai-service
-```
-
-### Docker build fails
-```bash
-# Clean Docker cache
-docker system prune -a
-
-# Rebuild from scratch
-docker-compose build --no-cache
-```
-
----
-
 ## 👥 Contributors
 
-- [Your Name] - Full Stack Development
-- [Team Member 2] - Frontend Development
-- [Team Member 3] - AI/ML Integration
-
+- Pragya Sekar
+  
 ---
 
 ## 📄 License
@@ -478,10 +422,5 @@ docker-compose build --no-cache
 This project is licensed under the MIT License - see LICENSE file for details.
 
 ---
+[UN SDG Goals](https://sdgs.un.org/goals)
 
-## 📚 Additional Resources
-
-- [GitHub Repository](https://github.com/<your-username>/pulse)
-- [Project Wiki](https://github.com/<your-username>/pulse/wiki)
-- [Issue Tracker](https://github.com/<your-username>/pulse/issues)
-- [UN SDG Goals](https://sdgs.un.org/goals)
