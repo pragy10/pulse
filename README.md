@@ -96,103 +96,38 @@ Citizens performing sustainable actions (waste reduction, renewable energy adopt
 
 ```
 pulse/
-├── frontend/              # React.js frontend
+├── frontend/
 │   ├── src/
-│   │   ├── components/    # Reusable UI components
-│   │   │   ├── Navbar.jsx
-│   │   │   ├── Post.jsx
-│   │   │   ├── PostCard.jsx
-│   │   │   ├── Comment.jsx
-│   │   │   ├── CreatePost.jsx
-│   │   │   ├── CommunityCard.jsx
-│   │   │   ├── UserProfile.jsx
-│   │   │   └── ProtectedRoute.jsx
-│   │   ├── pages/         # Page-level components
-│   │   │   ├── Home.jsx
-│   │   │   ├── Login.jsx
-│   │   │   ├── Register.jsx
-│   │   │   ├── Feed.jsx
-│   │   │   ├── Communities.jsx
-│   │   │   ├── Profile.jsx
-│   │   │   └── AdminDashboard.jsx
-│   │   ├── services/      # API calls
-│   │   │   ├── api.js
-│   │   │   └── auth.js
-│   │   ├── context/       # React Context
-│   │   │   └── AuthContext.jsx
-│   │   ├── utils/         # Helper functions
-│   │   │   └── helpers.js
-│   │   ├── App.jsx        # Main app component
-│   │   └── index.js       # Entry point
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   └── App.jsx
 │   ├── package.json
-│   ├── .env
 │   └── Dockerfile
 │
-├── backend/               # Node.js + Express API
+├── backend/
 │   ├── src/
-│   │   ├── models/        # Mongoose schemas
-│   │   │   ├── User.js
-│   │   │   ├── Post.js
-│   │   │   ├── Comment.js
-│   │   │   ├── Community.js
-│   │   │   ├── Vote.js
-│   │   │   ├── Membership.js
-│   │   │   └── Moderator.js
-│   │   ├── routes/        # API route definitions
-│   │   │   ├── auth.js
-│   │   │   ├── posts.js
-│   │   │   ├── comments.js
-│   │   │   ├── communities.js
-│   │   │   ├── users.js
-│   │   │   └── admin.js
-│   │   ├── controllers/   # Business logic
-│   │   │   ├── authController.js
-│   │   │   ├── postController.js
-│   │   │   ├── commentController.js
-│   │   │   ├── communityController.js
-│   │   │   ├── userController.js
-│   │   │   └── adminController.js
-│   │   ├── middleware/    # Auth, validation, rate limiting
-│   │   │   ├── auth.js
-│   │   │   ├── moderator.js
-│   │   │   ├── admin.js
-│   │   │   ├── validation.js
-│   │   │   └── rateLimiter.js
-│   │   ├── services/      # AI service integration
-│   │   │   ├── aiService.js
-│   │   │   ├── uploadService.js
-│   │   │   └── impactScoreService.js
-│   │   ├── config/        # Configuration
-│   │   │   ├── database.js
-│   │   │   └── constants.js
-│   │   └── server.js      # Entry point
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   └── server.js
 │   ├── package.json
-│   ├── .env
 │   └── Dockerfile
 │
-├── ai-service/            # Python/FastAPI AI microservice
+├── ai-service/
 │   ├── app/
-│   │   ├── models/        # AI models
-│   │   │   ├── __init__.py
-│   │   │   └── sdg_classifier.py
-│   │   ├── services/      # Classification & scoring
-│   │   │   ├── __init__.py
-│   │   │   ├── classification_service.py
-│   │   │   └── impact_score_service.py
-│   │   ├── routes/        # API endpoints
-│   │   │   ├── __init__.py
-│   │   │   └── classification.py
-│   │   ├── utils/         # Helper functions
-│   │   │   ├── __init__.py
-│   │   │   └── preprocessing.py
-│   │   └── main.py        # FastAPI app
+│   │   ├── models/
+│   │   ├── services/
+│   │   ├── routes/
+│   │   └── main.py
 │   ├── requirements.txt
-│   ├── .env
 │   └── Dockerfile
 │
-├── docker-compose.yml     # Multi-container orchestration
-├── .gitignore             # Git ignore rules
-└── README.md              # This file
+├── docker-compose.yml
+├── .gitignore
+└── README.md
+
 ```
 
 ---
@@ -250,7 +185,7 @@ git push origin feature/6-create-post
 
 ---
 
-### Option 1: Docker Compose (Recommended) 🐳
+### Option 1: Docker Compose 🐳
 
 **Step 1: Clone the repository**
 ```bash
@@ -423,4 +358,5 @@ This project is licensed under the MIT License - see LICENSE file for details.
 
 ---
 [UN SDG Goals](https://sdgs.un.org/goals)
+
 
