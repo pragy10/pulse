@@ -92,109 +92,42 @@ Citizens performing sustainable actions (waste reduction, renewable energy adopt
 
 ---
 
----
-
 ## 📂 Project Structure
 
 ```
 pulse/
-├── frontend/              # React.js frontend
+├── frontend/
 │   ├── src/
-│   │   ├── components/    # Reusable UI components
-│   │   │   ├── Navbar.jsx
-│   │   │   ├── Post.jsx
-│   │   │   ├── PostCard.jsx
-│   │   │   ├── Comment.jsx
-│   │   │   ├── CreatePost.jsx
-│   │   │   ├── CommunityCard.jsx
-│   │   │   ├── UserProfile.jsx
-│   │   │   └── ProtectedRoute.jsx
-│   │   ├── pages/         # Page-level components
-│   │   │   ├── Home.jsx
-│   │   │   ├── Login.jsx
-│   │   │   ├── Register.jsx
-│   │   │   ├── Feed.jsx
-│   │   │   ├── Communities.jsx
-│   │   │   ├── Profile.jsx
-│   │   │   └── AdminDashboard.jsx
-│   │   ├── services/      # API calls
-│   │   │   ├── api.js
-│   │   │   └── auth.js
-│   │   ├── context/       # React Context
-│   │   │   └── AuthContext.jsx
-│   │   ├── utils/         # Helper functions
-│   │   │   └── helpers.js
-│   │   ├── App.jsx        # Main app component
-│   │   └── index.js       # Entry point
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   └── App.jsx
 │   ├── package.json
-│   ├── .env
 │   └── Dockerfile
 │
-├── backend/               # Node.js + Express API
+├── backend/
 │   ├── src/
-│   │   ├── models/        # Mongoose schemas
-│   │   │   ├── User.js
-│   │   │   ├── Post.js
-│   │   │   ├── Comment.js
-│   │   │   ├── Community.js
-│   │   │   ├── Vote.js
-│   │   │   ├── Membership.js
-│   │   │   └── Moderator.js
-│   │   ├── routes/        # API route definitions
-│   │   │   ├── auth.js
-│   │   │   ├── posts.js
-│   │   │   ├── comments.js
-│   │   │   ├── communities.js
-│   │   │   ├── users.js
-│   │   │   └── admin.js
-│   │   ├── controllers/   # Business logic
-│   │   │   ├── authController.js
-│   │   │   ├── postController.js
-│   │   │   ├── commentController.js
-│   │   │   ├── communityController.js
-│   │   │   ├── userController.js
-│   │   │   └── adminController.js
-│   │   ├── middleware/    # Auth, validation, rate limiting
-│   │   │   ├── auth.js
-│   │   │   ├── moderator.js
-│   │   │   ├── admin.js
-│   │   │   ├── validation.js
-│   │   │   └── rateLimiter.js
-│   │   ├── services/      # AI service integration
-│   │   │   ├── aiService.js
-│   │   │   ├── uploadService.js
-│   │   │   └── impactScoreService.js
-│   │   ├── config/        # Configuration
-│   │   │   ├── database.js
-│   │   │   └── constants.js
-│   │   └── server.js      # Entry point
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   └── server.js
 │   ├── package.json
-│   ├── .env
 │   └── Dockerfile
 │
-├── ai-service/            # Python/FastAPI AI microservice
+├── ai-service/
 │   ├── app/
-│   │   ├── models/        # AI models
-│   │   │   ├── __init__.py
-│   │   │   └── sdg_classifier.py
-│   │   ├── services/      # Classification & scoring
-│   │   │   ├── __init__.py
-│   │   │   ├── classification_service.py
-│   │   │   └── impact_score_service.py
-│   │   ├── routes/        # API endpoints
-│   │   │   ├── __init__.py
-│   │   │   └── classification.py
-│   │   ├── utils/         # Helper functions
-│   │   │   ├── __init__.py
-│   │   │   └── preprocessing.py
-│   │   └── main.py        # FastAPI app
+│   │   ├── models/
+│   │   ├── services/
+│   │   ├── routes/
+│   │   └── main.py
 │   ├── requirements.txt
-│   ├── .env
 │   └── Dockerfile
 │
-├── docker-compose.yml     # Multi-container orchestration
-├── .gitignore             # Git ignore rules
-└── README.md              # This file
+├── docker-compose.yml
+├── .gitignore
+└── README.md
+
 ```
 
 ---
@@ -252,7 +185,7 @@ git push origin feature/6-create-post
 
 ---
 
-### Option 1: Docker Compose (Recommended) 🐳
+### Option 1: Docker Compose 🐳
 
 **Step 1: Clone the repository**
 ```bash
@@ -413,64 +346,10 @@ Open browser: `http://localhost:5173`
 
 ---
 
-## 📸 Screenshots for Assignment
-
-Take screenshots of:
-1. ✅ Terminal showing `docker-compose up` success
-2. ✅ Browser showing app running on `localhost:5173`
-3. ✅ GitHub repo page showing branches
-4. ✅ This README.md file on GitHub
-5. ✅ Docker Desktop showing running containers
-
----
-
-## 🐛 Troubleshooting
-
-### Port already in use
-```bash
-# Kill process using port 5000 (macOS/Linux)
-lsof -ti:5000 | xargs kill -9
-
-# Windows
-netstat -ano | findstr :5000
-taskkill /PID <PID> /F
-
-# Or change port in backend/.env
-PORT=5001
-```
-
-### MongoDB connection failed
-```bash
-# Restart MongoDB container
-docker-compose restart mongodb
-
-# Check MongoDB logs
-docker-compose logs mongodb
-```
-
-### AI Service not responding
-```bash
-# Rebuild AI service
-docker-compose up --build ai-service
-```
-
-### Docker build fails
-```bash
-# Clean Docker cache
-docker system prune -a
-
-# Rebuild from scratch
-docker-compose build --no-cache
-```
-
----
-
 ## 👥 Contributors
 
-- [Your Name] - Full Stack Development
-- [Team Member 2] - Frontend Development
-- [Team Member 3] - AI/ML Integration
-
+- Pragya Sekar
+  
 ---
 
 ## 📄 License
@@ -478,10 +357,6 @@ docker-compose build --no-cache
 This project is licensed under the MIT License - see LICENSE file for details.
 
 ---
+[UN SDG Goals](https://sdgs.un.org/goals)
 
-## 📚 Additional Resources
 
-- [GitHub Repository](https://github.com/<your-username>/pulse)
-- [Project Wiki](https://github.com/<your-username>/pulse/wiki)
-- [Issue Tracker](https://github.com/<your-username>/pulse/issues)
-- [UN SDG Goals](https://sdgs.un.org/goals)
