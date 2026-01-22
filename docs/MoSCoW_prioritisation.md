@@ -64,12 +64,12 @@ Features explicitly excluded from Release 1.0 per project scope and timeline con
 
 | Feature | Reason for Exclusion |
 |---------|---------------------|
-| Advanced Analytics Dashboard | Complex feature requiring data visualization - planned for Release 2.0 [file:32] |
-| Push Notifications | Requires real-time infrastructure setup - out of scope for 3-month timeline [file:32] |
-| Multi-language Support | AI model currently trained for English only [file:35] |
-| Email Verification System | Optional dependency - basic auth sufficient for MVP [file:35] |
-| Real-time Chat/Messaging | Not core to SDG tracking mission - future consideration [file:32] |
-| Mobile App (iOS/Android) | Web responsive design sufficient - native apps in Release 2.0 [file:32] |
+| Advanced Analytics Dashboard | Complex feature requiring data visualization - planned for Release 2.0  |
+| Push Notifications | Requires real-time infrastructure setup - out of scope for 3-month timeline  |
+| Multi-language Support | AI model currently trained for English only  |
+| Email Verification System | Optional dependency - basic auth sufficient for MVP  |
+| Real-time Chat/Messaging | Not core to SDG tracking mission - future consideration  |
+| Mobile App (iOS/Android) | Web responsive design sufficient - native apps in Release 2.0  |
 
 ---
 
