@@ -150,6 +150,15 @@ git checkout -b feature/7-ai-sdg-classification
 git checkout -b feature/15-voting-system
 ```
 
+Naming Convention:
+
+```bash
+feature/<issue-number>-<short-description>
+bugfix/<issue-number>-<short-description>
+hotfix/<short-description>
+chore/<short-description>
+```
+
 ### Workflow
 1. Create feature branch from `main`
 2. Develop and commit changes
@@ -358,5 +367,6 @@ This project is licensed under the MIT License - see LICENSE file for details.
 
 ---
 [UN SDG Goals](https://sdgs.un.org/goals)
+
 
 
