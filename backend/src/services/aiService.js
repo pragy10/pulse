@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const AI_SERVICE_URL = process.env.AI_SERVICE_URL || 'http://localhost:8000';
+// .trim() removes any invisible Windows \r characters from the .env file
+const AI_SERVICE_URL = (process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000').trim();
 
 // Classify post content into SDG
 export const classifyPost = async (title, content, imageUrl = null) => {
@@ -10,7 +11,7 @@ export const classifyPost = async (title, content, imageUrl = null) => {
       content,
       image_url: imageUrl
     }, {
-      timeout: 5000 // 5 second timeout
+      timeout: 30000 
     });
 
     return {
@@ -20,9 +21,16 @@ export const classifyPost = async (title, content, imageUrl = null) => {
       impact_score: response.data.impact_score
     };
   } catch (error) {
-    console.error('AI Service Error:', error.message);
+    // Enhanced error logging to catch the exact issue
+    console.error('\n--- AI Service Communication Error ---');
+    console.error('URL Attempted:', `${AI_SERVICE_URL}/api/classify`);
+    console.error('Error Code:', error.code);
+    console.error('Error Message:', error.message);
+    if (error.response) {
+      console.error('Python Server Response:', error.response.data);
+    }
+    console.error('--------------------------------------\n');
     
-    // If AI service is down, return default values
     return {
       success: false,
       sdg_tag: null,

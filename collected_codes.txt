@@ -2,21 +2,455 @@
 File: README.md
 ================================================================================
 
-# Pulse - SDG Social Media Platform
+# Pulse - SDG-Based Social Media Platform
 
-A social media platform for tracking and gamifying sustainable actions aligned with UN Sustainable Development Goals.
+## Project Overview
+Pulse is a specialized social media platform designed to track, classify, and gamify sustainable human actions aligned with the United Nations' 17 Sustainable Development Goals (SDGs). Developed for UNCT India in collaboration with NITI Aayog, Pulse empowers citizens to share their eco-friendly activities, receive AI-driven impact assessments, and engage with like-minded sustainability advocates.
 
-## Tech Stack
-- Frontend: React.js
-- Backend: Node.js + Express.js
-- AI Service: Python + FastAPI
-- Database: MongoDB
+## Problem It Solves
+Existing social media platforms lack mechanisms to systematically track, classify, and recognize sustainable actions. There is no dedicated space where individuals can:
+- Share eco-friendly activities and get quantifiable recognition.
+- Understand which UN SDG their actions support.
+- Join communities focused on specific sustainability goals.
+- Measure collective impact through transparent metrics.
+
+Citizens performing sustainable actions (waste reduction, renewable energy adoption, community volunteering) have no platform to receive automated feedback on their SDG contributions or connect with others working toward similar goals.
+
+## Target Users (Personas)
+
+### General User (Contributor)
+- **Age**: 18-60 years
+- **Characteristics**: Sustainability-conscious citizens, NGO members, environmental advocates.
+- **Goals**: Track personal green actions, earn recognition through Impact Scores, discover SDG communities.
+- **Technical Competency**: Moderate - familiar with social media platforms.
+- **Usage Pattern**: Daily interaction to log actions and view "Green Karma" scores.
+
+### Community Moderator
+- **Characteristics**: Trusted users managing SDG-specific communities.
+- **Goals**: Maintain content quality, enforce community guidelines, highlight impactful posts.
+- **Permissions**: Delete posts/comments, mute users, pin important content.
+- **Technical Competency**: Moderate
+
+### Administrator
+- **Characteristics**: UNCT India and NITI Aayog staff overseeing platform governance.
+- **Goals**: Manage users, configure AI scoring weights, monitor system health.
+- **Permissions**: Full platform control including user role management and AI service oversight.
+- **Technical Competency**: High
+
+## Vision Statement
+**To create the world's first AI-powered social platform where every sustainable action is recognized, classified, and celebrated—empowering individuals to visualize their contribution to the UN's 2030 Agenda while building vibrant communities around each of the 17 Sustainable Development Goals.**
+
+## Key Features / Goals
+
+### Core Features (Release 1.0)
+- **AI-Powered SDG Classification**: Machine learning automatically categorizes posts into one of 17 UN SDGs within quickly.
+- **Impact Scoring System**: Posts receive scores (0-100) based on SDG relevance and engagement, aggregated into user "Green Karma" .
+- **Community-Based Feeds**: 17 default SDG communities (e.g., SDG-13 Climate Action) with customizable feeds.
+- **Social Engagement**: Reddit-style upvote/downvote system and threaded comments.
+- **Content Moderation**: Tools for moderators to manage posts, comments, and user behavior with full audit logging.
+- **User Profiles**: Display username, bio, avatar, total Impact Score, and contribution history.
+- **Secure Authentication**: JWT-based registration, login, and session management.
+
+### Technical Architecture
+- **Frontend**: React.js responsive web application (desktop + mobile)
+- **Backend**: Node.js/Express REST API with MongoDB database
+- **AI Service**: Python/FastAPI microservice for SDG classification
+- **Storage**: AWS S3 for image/media uploads
+- **Deployment**: Dockerized services with Docker Compose
+
+## Success Metrics
+
+### Usability Goals
+- **90% of new users** can create their first post and view Impact Score within 5 minutes of registration.
+- **80% of test users** can navigate the platform without assistance. 
+- All frequent functions accessible within **2 clicks** from the main dashboard. 
+
+### Performance Benchmarks
+- Support **100 concurrent users** without performance degradation. 
+- API response time for home feed: **< 500 milliseconds**.
+- AI classification accuracy: **≥ 85%** on SDG test datasets. 
+
+### Reliability & Security
+- **99% uptime** during standard operation hours. 
+- JWT authentication for all protected endpoints.
+- Rate limiting: max 100 requests/minute to prevent DDoS attacks. 
+
+### User Engagement
+- Positive feedback on usability and gamification elements. 
+- Active participation across all 17 SDG communities.
+- Growing user Green Karma scores indicating sustained engagement.
+
+## Assumptions & Constraints
+
+### Assumptions
+- Users have reliable internet access and basic social media familiarity. 
+- English is the primary language for initial SDG classification. 
+- Pre-trained ML models for SDG mapping are available and deployable.
+
+### Constraints
+- **Timeline**: 3-month development window.
+- **Technology Stack**: Must use MERN stack (MongoDB, Express, React, Node.js).
+- **Budget**: Free and open-source technologies only to minimize costs.
+- **Deployment**: All services must be Docker-containerized.
+- **AI Limitation**: No real-time model training in Release 1.0—inference only.
+
+---
+
+## 📂 Project Structure
+
+```
+pulse/
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   └── App.jsx
+│   ├── package.json
+│   └── Dockerfile
+│
+├── backend/
+│   ├── src/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   └── server.js
+│   ├── package.json
+│   └── Dockerfile
+│
+├── ai-service/
+│   ├── app/
+│   │   ├── models/
+│   │   ├── services/
+│   │   ├── routes/
+│   │   └── main.py
+│   ├── requirements.txt
+│   └── Dockerfile
+│
+├── docker-compose.yml
+├── .gitignore
+└── README.md
+
+```
+
+---
+
+## 🔧 Branching Strategy
+
+We follow **GitHub Flow** for this project.
+
+### Main Branch
+- `main` - Production-ready code
+- Protected branch, requires pull requests
+
+### Feature Branches
+Create feature branches for each user story:
+
+```bash
+# Format: feature/<issue-number>-<short-description>
+git checkout -b feature/1-user-registration
+git checkout -b feature/7-ai-sdg-classification
+git checkout -b feature/15-voting-system
+```
+
+Naming Convention:
+
+```bash
+feature/<issue-number>-<short-description>
+bugfix/<issue-number>-<short-description>
+hotfix/<short-description>
+chore/<short-description>
+```
+
+### Workflow
+1. Create feature branch from `main`
+2. Develop and commit changes
+3. Push to GitHub
+4. Create Pull Request
+5. Review and merge to `main`
+
+**Example:**
+```bash
+# Create and switch to feature branch
+git checkout -b feature/6-create-post
+
+# Make changes, then commit
+git add .
+git commit -m "Add post creation API endpoint"
+
+# Push to GitHub
+git push origin feature/6-create-post
+
+# Create PR on GitHub web interface
+# After review, merge to main
+```
+
+---
+
+## 🚀 Quick Start – Local Development
+
+### Prerequisites
+- **Node.js** 18+ ([Download](https://nodejs.org/))
+- **Python** 3.9+ ([Download](https://python.org/))
+- **Docker Desktop** ([Download](https://docker.com/products/docker-desktop))
+- **MongoDB** (via Docker or local install)
+
+---
+
+### Option 1: Docker Compose 🐳
+
+**Step 1: Clone the repository**
+```bash
+git clone https://github.com/<your-username>/pulse.git
+cd pulse
+```
+
+**Step 2: Create environment files**
+
+Create `backend/.env`:
+```env
+PORT=5000
+MONGODB_URI=mongodb://mongodb:27017/pulse
+JWT_SECRET=your_super_secret_jwt_key_change_in_production
+JWT_EXPIRE=7d
+NODE_ENV=development
+AI_SERVICE_URL=http://ai-service:8000
+```
+
+Create `frontend/.env`:
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+Create `ai-service/.env`:
+```env
+ENVIRONMENT=development
+```
+
+**Step 3: Build and run with Docker Compose**
+```bash
+docker-compose up --build
+```
+
+**Step 4: Access the application**
+- Frontend: `http://localhost:5173`
+- Backend API: `http://localhost:5000/api`
+- AI Service: `http://localhost:8000/docs`
+
+---
+
+### Option 2: Local Development (Without Docker)
+
+**Step 1: Install MongoDB locally**
+```bash
+# macOS (Homebrew)
+brew install mongodb-community
+
+# Ubuntu/Debian
+sudo apt-get install mongodb
+
+# Start MongoDB
+mongod --dbpath=/path/to/data
+```
+
+**Step 2: Backend setup**
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+**Step 3: AI Service setup**
+```bash
+cd ai-service
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
+```
+
+**Step 4: Frontend setup**
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+---
+
+## 🐳 Docker Commands Reference
+
+### Build individual services
+```bash
+docker build -t pulse-backend ./backend
+docker build -t pulse-frontend ./frontend
+docker build -t pulse-ai-service ./ai-service
+```
+
+### Run containers
+```bash
+docker-compose up          # Start all services
+docker-compose up -d       # Start in detached mode
+docker-compose down        # Stop all services
+docker-compose logs -f     # View logs
+```
+
+### Rebuild after code changes
+```bash
+docker-compose up --build
+```
+
+### Access container shell
+```bash
+docker exec -it pulse-backend-1 sh
+docker exec -it pulse-ai-service-1 bash
+```
+
+---
+
+## 🛠️ Local Development Tools
+
+| Tool | Version | Purpose |
+|------|---------|---------|
+| **Node.js** | 18+ | Backend runtime |
+| **npm** | 9+ | Package manager |
+| **Python** | 3.9+ | AI service runtime |
+| **pip** | Latest | Python package manager |
+| **Docker Desktop** | Latest | Containerization |
+| **MongoDB** | 6.0+ | Database |
+| **Git** | 2.0+ | Version control |
+| **VS Code** | Latest | Code editor (recommended) |
+
+### Recommended VS Code Extensions
+- ESLint
+- Prettier
+- Python
+- Docker
+- MongoDB for VS Code
+- Thunder Client (API testing)
+
+---
+
+## 🧪 Testing the Setup
+
+### 1. Test Backend API
+```bash
+# Health check
+curl http://localhost:5000/health
+
+# Should return:
+# {"status":"OK","message":"Pulse Backend Server is running"}
+```
+
+### 2. Test AI Service
+```bash
+# Health check
+curl http://localhost:8000/health
+
+# Should return:
+# {"status":"OK","message":"Pulse AI Service is running"}
+```
+
+### 3. Test Frontend
+Open browser: `http://localhost:5173`
+- Should see Pulse login/registration page
+- No console errors
+
+---
+
+## 👥 Contributors
+
+- Pragya Sekar
+  
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see LICENSE file for details.
+
+---
+[UN SDG Goals](https://sdgs.un.org/goals)
+
+
+
 
 
 ================================================================================
 File: docker-compose.yml
 ================================================================================
 
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6
+    container_name: pulse-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - pulse-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: pulse-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=development
+      - PORT=5000
+      - MONGODB_URI=mongodb://mongodb:27017/pulse
+      - JWT_SECRET=your_super_secret_jwt_key_change_in_production
+      - JWT_EXPIRE=7d
+      - AI_SERVICE_URL=http://ai-service:8000
+    depends_on:
+      - mongodb
+      - ai-service
+    networks:
+      - pulse-network
+    volumes:
+      - ./backend/uploads:/app/uploads
+
+  ai-service:
+    build:
+      context: ./ai-service
+      dockerfile: Dockerfile
+    container_name: pulse-ai-service
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=development
+    networks:
+      - pulse-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: pulse-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:5000/api
+    depends_on:
+      - backend
+    networks:
+      - pulse-network
+
+networks:
+  pulse-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
 
 
 ================================================================================
@@ -50,20 +484,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
 
-# Load environment variables
 load_dotenv()
 
-# Import routes with relative import
 from .routes.classification import router as classification_router
 
-# Initialize FastAPI app
 app = FastAPI(
     title="Pulse AI Service",
     description="AI-powered SDG Classification and Impact Scoring",
     version="1.0.0"
 )
 
-# CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -72,7 +502,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Health check endpoint
 @app.get("/health")
 async def health_check():
     return {
@@ -81,10 +510,8 @@ async def health_check():
         "version": "1.0.0"
     }
 
-# Include routers
 app.include_router(classification_router, prefix="/api", tags=["Classification"])
 
-# Root endpoint
 @app.get("/")
 async def root():
     return {
@@ -136,10 +563,7 @@ class ClassificationResponse(BaseModel):
 @router.post("/classify", response_model=ClassificationResponse)
 async def classify_post(request: ClassificationRequest):
     try:
-        # Classify the post into SDG
         sdg_tag, confidence = classify_sdg(request.title, request.content)
-        
-        # Calculate impact score
         impact_score = calculate_impact_score(sdg_tag, confidence)
         
         return ClassificationResponse(
@@ -162,84 +586,46 @@ File: ai-service\app\services\__init__.py
 File: ai-service\app\services\classification_service.py
 ================================================================================
 
-import re
+from transformers import pipeline
 from typing import Tuple
+import os
 
-# SDG keywords mapping
-SDG_KEYWORDS = {
-    1: ['poverty', 'poor', 'income', 'economic resources', 'vulnerable'],
-    2: ['hunger', 'food', 'nutrition', 'agriculture', 'farming'],
-    3: ['health', 'disease', 'medical', 'healthcare', 'wellness', 'fitness'],
-    4: ['education', 'learning', 'school', 'student', 'teaching'],
-    5: ['gender', 'women', 'girls', 'equality', 'empowerment'],
-    6: ['water', 'sanitation', 'hygiene', 'clean water'],
-    7: ['energy', 'renewable', 'solar', 'wind', 'electricity', 'power'],
-    8: ['employment', 'job', 'work', 'economic growth', 'economy'],
-    9: ['infrastructure', 'innovation', 'industry', 'technology'],
-    10: ['inequality', 'discrimination', 'inclusion', 'equity'],
-    11: ['city', 'urban', 'housing', 'transport', 'sustainable cities'],
-    12: ['consumption', 'production', 'waste', 'recycling', 'sustainable'],
-    13: ['climate', 'global warming', 'carbon', 'emissions', 'environment'],
-    14: ['ocean', 'marine', 'sea', 'fish', 'coastal'],
-    15: ['forest', 'land', 'biodiversity', 'wildlife', 'ecosystem'],
-    16: ['peace', 'justice', 'institutions', 'governance', 'law'],
-    17: ['partnership', 'cooperation', 'global', 'collaboration']
-}
+classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+
+SDG_LABELS = [
+    "No Poverty", "Zero Hunger", "Good Health and Well-being", 
+    "Quality Education", "Gender Equality", "Clean Water and Sanitation", 
+    "Affordable and Clean Energy", "Decent Work and Economic Growth", 
+    "Industry, Innovation and Infrastructure", "Reduced Inequalities", 
+    "Sustainable Cities and Communities", "Responsible Consumption and Production", 
+    "Climate Action", "Life Below Water", "Life on Land", 
+    "Peace, Justice and Strong Institutions", "Partnerships for the Goals"
+]
 
 def classify_sdg(title: str, content: str) -> Tuple[int, float]:
     """
-    Classify text into one of 17 SDG categories using keyword matching.
+    Classify text into one of 17 SDG categories using Zero-Shot Classification.
     Returns: (sdg_tag, confidence)
     """
-    text = f"{title} {content}".lower()
+    text = f"{title}: {content}"
     
-    # Count keyword matches for each SDG
-    scores = {}
-    for sdg_num, keywords in SDG_KEYWORDS.items():
-        score = 0
-        for keyword in keywords:
-            # Count occurrences of each keyword
-            score += len(re.findall(r'\b' + keyword + r'\b', text))
-        scores[sdg_num] = score
+    result = classifier(text, candidate_labels=SDG_LABELS)
     
-    # Find SDG with highest score
-    if max(scores.values()) == 0:
-        # Default to SDG 13 (Climate Action) if no matches
-        return 13, 0.5
+    top_label = result['labels'][0]
+    confidence = result['scores'][0]
+    sdg_tag = SDG_LABELS.index(top_label) + 1
     
-    best_sdg = max(scores, key=scores.get)
-    max_score = scores[best_sdg]
-    
-    # Calculate confidence (normalized)
-    total_score = sum(scores.values())
-    confidence = min(max_score / (total_score + 1), 0.95)
-    
-    return best_sdg, round(confidence, 2)
+    return sdg_tag, round(float(confidence), 2)
 
 def calculate_impact_score(sdg_tag: int, confidence: float) -> int:
     """
-    Calculate impact score based on SDG and confidence.
-    Returns: score (0-100)
+    Calculate impact score based on SDG priority and model confidence.
     """
-    # Base scores for each SDG
-    base_scores = {
-        1: 85, 2: 85, 3: 80, 4: 80, 5: 75,
-        6: 80, 7: 90, 8: 75, 9: 75, 10: 75,
-        11: 80, 12: 90, 13: 90, 14: 85, 15: 85,
-        16: 75, 17: 70
-    }
+    weights = {1: 90, 2: 90, 7: 95, 12: 95, 13: 100, 14: 85, 15: 85 }
+    base = weights.get(sdg_tag, 80)
+    final_score = int(base * confidence)
     
-    base = base_scores.get(sdg_tag, 70)
-    confidence_bonus = int(confidence * 15)
-    
-    return min(base + confidence_bonus, 100)
-
-
-================================================================================
-File: ai-service\app\services\impact_score_service.py
-================================================================================
-
-
+    return min(max(final_score, 10), 100)
 
 ================================================================================
 File: ai-service\app\utils\__init__.py
@@ -252,6 +638,63 @@ File: ai-service\app\utils\preprocessing.py
 ================================================================================
 
 
+
+================================================================================
+File: ai-service\test\test-ai.py
+================================================================================
+
+from transformers import pipeline
+from typing import Tuple
+import time
+
+# 1. Initialize the pipeline
+print("Loading model... (This may take a while on the first run)")
+start_time = time.time()
+try:
+    classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+    print(f"Model loaded successfully in {time.time() - start_time:.2f} seconds.")
+except Exception as e:
+    print(f"Error loading model: {e}")
+    print("Tip: Run 'pip install transformers torch' if you haven't yet.")
+    exit()
+
+SDG_LABELS = [
+    "No Poverty", "Zero Hunger", "Good Health and Well-being", 
+    "Quality Education", "Gender Equality", "Clean Water and Sanitation", 
+    "Affordable and Clean Energy", "Decent Work and Economic Growth", 
+    "Industry, Innovation and Infrastructure", "Reduced Inequalities", 
+    "Sustainable Cities and Communities", "Responsible Consumption and Production", 
+    "Climate Action", "Life Below Water", "Life on Land", 
+    "Peace, Justice and Strong Institutions", "Partnerships for the Goals"
+]
+
+def classify_sdg(title: str, content: str) -> Tuple[int, float]:
+    text = f"{title}: {content}"
+    result = classifier(text, candidate_labels=SDG_LABELS)
+    top_label = result['labels'][0]
+    confidence = result['scores'][0]
+    sdg_tag = SDG_LABELS.index(top_label) + 1
+    return sdg_tag, round(float(confidence), 2)
+
+def calculate_impact_score(sdg_tag: int, confidence: float) -> int:
+    weights = {1: 90, 2: 90, 7: 95, 12: 95, 13: 100, 14: 85, 15: 85 }
+    base = weights.get(sdg_tag, 80)
+    final_score = int(base * confidence)
+    return min(max(final_score, 10), 100)
+
+# 2. Run a Test Case
+if __name__ == "__main__":
+    test_title = "Solar Panel Project"
+    test_content = "We installed 10 new solar panels on the community center roof to reduce electricity costs."
+    
+    print(f"\nTesting with: '{test_title}'")
+    tag, conf = classify_sdg(test_title, test_content)
+    score = calculate_impact_score(tag, conf)
+    
+    print(f"--- RESULTS ---")
+    print(f"Assigned SDG: {tag} ({SDG_LABELS[tag-1]})")
+    print(f"Confidence:   {conf}")
+    print(f"Impact Score: {score}")
 
 ================================================================================
 File: backend\package-lock.json
@@ -2201,11 +2644,13 @@ import { fileURLToPath } from 'url';
 import connectDB from './config/database.js';
 import { apiLimiter } from './middleware/rateLimiter.js';
 
+
 // Import routes
 import authRoutes from './routes/auth.js';
 import postRoutes from './routes/posts.js';
 import communityRoutes from './routes/communities.js';
 import commentRoutes from './routes/comments.js';
+import userRoutes from './routes/users.js';
 
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -2223,11 +2668,12 @@ const app = express();
 // Middleware
 app.use(helmet());
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Serve uploaded files
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // Apply rate limiting
 app.use('/api/', apiLimiter);
@@ -2250,6 +2696,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/posts', commentRoutes);
 app.use('/api/communities', communityRoutes);
+app.use('/api/users', userRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -2662,44 +3109,18 @@ export const getComments = async (req, res) => {
 export const deleteComment = async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.id);
-
-    if (!comment) {
-      return res.status(404).json({
-        success: false,
-        message: 'Comment not found'
-      });
-    }
-
-    // Check authorization
+    
     const isOwner = comment.user_id.toString() === req.user._id.toString();
-    const isAdmin = req.user.role === 'admin';
-    const isModerator = req.user.role === 'moderator';
+    const isModerator = req.user.role === 'moderator' || req.user.role === 'admin';
 
-    if (!isOwner && !isAdmin && !isModerator) {
-      return res.status(403).json({
-        success: false,
-        message: 'Not authorized to delete this comment'
-      });
+    if (!isOwner && !isModerator) {
+      return res.status(403).json({ success: false, message: 'Not authorized' });
     }
 
-    await comment.deleteOne();
-
-    // Decrement post comment count
-    await Post.findByIdAndUpdate(comment.post_id, {
-      $inc: { comment_count: -1 }
-    });
-
-    res.status(200).json({
-      success: true,
-      message: 'Comment deleted successfully'
-    });
+    await Comment.findByIdAndDelete(req.params.id);
+    res.status(200).json({ success: true, message: 'Comment deleted' });
   } catch (error) {
-    console.error('Delete comment error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Error deleting comment',
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -2939,99 +3360,73 @@ import { getImageUrl } from '../services/uploadService.js';
 // @access  Private
 export const createPost = async (req, res) => {
   try {
-    const { title, content, comm_id } = req.body;
+    const { title, content } = req.body;
     const userId = req.user._id;
 
-    // Validate input
-    if (!title || !content || !comm_id) {
+    if (!title || !content) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide title, content, and community'
+        message: 'Please provide title and content'
       });
     }
 
-    // Check if community exists
-    const community = await Community.findById(comm_id);
-    if (!community) {
-      return res.status(404).json({
-        success: false,
-        message: 'Community not found'
-      });
-    }
-
-    // Handle image upload
     let imageUrl = '';
     if (req.file) {
-      imageUrl = getImageUrl(req.file.filename);
+      imageUrl = getImageUrl(req.file); // Returns a Base64 string
     }
 
-    // Create post with pending status
+    // 🛑 1. THE WAITING PHASE: Node.js stops here and waits for Python!
+    const classification = await classifyPost(title, content, imageUrl);
+    
+    // Set fallback values just in case the AI is down
+    let sdg_tag = 13; 
+    let impactScore = 10;
+    let confidence = 0;
+
+    // If Python succeeded, grab the real scores
+    if (classification.success && classification.sdg_tag) {
+      sdg_tag = classification.sdg_tag;
+      confidence = classification.confidence;
+      impactScore = calculateImpactScore(classification.sdg_tag, classification.confidence, 0);
+    }
+
+    // 🔍 2. THE ROUTING PHASE: Find the matching community
+    const community = await Community.findOne({ sdg_number: sdg_tag });
+    if (!community) {
+      return res.status(500).json({ success: false, message: 'System error: SDG Community not found' });
+    }
+
+    // 💾 3. THE SAVING PHASE: Save to the database
     const post = await Post.create({
       user_id: userId,
-      comm_id,
+      comm_id: community._id, 
       title,
       content,
       image_url: imageUrl,
-      status: 'pending'
+      sdg_tag: sdg_tag,
+      impact_score: impactScore,
+      classification_confidence: confidence,
+      status: 'published' // It skips 'pending' entirely now!
     });
 
-    // Call AI service for classification (async, don't wait)
-    classifyPost(title, content, imageUrl)
-      .then(async (classification) => {
-        if (classification.success && classification.sdg_tag) {
-          const impactScore = calculateImpactScore(
-            classification.sdg_tag,
-            classification.confidence
-          );
+    // Update karma and counts
+    await updateUserKarma(userId, impactScore);
+    await Community.findByIdAndUpdate(community._id, { $inc: { post_count: 1 } });
 
-          // Update post with AI results
-          post.sdg_tag = classification.sdg_tag;
-          post.impact_score = impactScore;
-          post.classification_confidence = classification.confidence;
-          post.status = 'published';
-          await post.save();
+    // Populate user and community data for the React frontend
+    await post.populate('user_id', 'username avatar green_karma');
+    await post.populate('comm_id', 'name sdg_number');
 
-          // Update user's karma
-          await updateUserKarma(userId, impactScore);
-
-          // Update community post count
-          await Community.findByIdAndUpdate(comm_id, {
-            $inc: { post_count: 1 }
-          });
-        } else {
-          // If AI fails, mark as published with default values
-          post.status = 'published';
-          post.sdg_tag = community.sdg_number; // Use community's SDG
-          post.impact_score = 10; // Default score
-          await post.save();
-          
-          await updateUserKarma(userId, 10);
-          await Community.findByIdAndUpdate(comm_id, {
-            $inc: { post_count: 1 }
-          });
-        }
-      })
-      .catch(async (error) => {
-        console.error('Classification error:', error);
-        // Fallback: publish with default values
-        post.status = 'published';
-        post.sdg_tag = community.sdg_number;
-        post.impact_score = 10;
-        await post.save();
-      });
-
+    // 🚀 4. THE RESPONSE PHASE: Tell React we are done!
     res.status(201).json({
       success: true,
-      message: 'Post created successfully. Classification in progress...',
+      message: 'Post classified and created successfully!',
       data: post
     });
+
   } catch (error) {
     console.error('Create post error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Error creating post',
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined
-    });
+    res.status(500).json({ success: false, message: 'Error creating post' });
   }
 };
 
@@ -3040,12 +3435,16 @@ export const createPost = async (req, res) => {
 // @access  Public
 export const getPosts = async (req, res) => {
   try {
-    const { comm_id, sdg_tag, sort = 'new', page = 1, limit = 20 } = req.query;
+    // FIXED: Added 'user' to the destructured query variables
+    const { comm_id, sdg_tag, user, sort = 'new', page = 1, limit = 20 } = req.query;
 
     // Build query
     const query = { status: 'published' };
     if (comm_id) query.comm_id = comm_id;
     if (sdg_tag) query.sdg_tag = parseInt(sdg_tag);
+    
+    // FIXED: If the frontend sends ?user=ID, add it to the database search query
+    if (user) query.user_id = user;
 
     // Sorting options
     let sortOption = {};
@@ -3124,61 +3523,246 @@ export const getPostById = async (req, res) => {
   }
 };
 
+export const updatePost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    if (!post) {
+      return res.status(404).json({ success: false, message: 'Post not found' });
+    }
+
+    // Check authorization: Only the owner can edit
+    if (post.user_id.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ success: false, message: 'Not authorized to edit this post' });
+    }
+
+    // Update the fields
+    post.title = req.body.title || post.title;
+    post.content = req.body.content || post.content;
+    
+    await post.save();
+
+    res.status(200).json({ success: true, data: post });
+  } catch (error) {
+    console.error('Update post error:', error);
+    res.status(500).json({ success: false, message: 'Error updating post' });
+  }
+};
+
 // @desc    Delete post
 // @route   DELETE /api/posts/:id
 // @access  Private (Owner, Moderator, Admin)
 export const deletePost = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(req.params.id).populate('comm_id');
+    if (!post) return res.status(404).json({ success: false, message: 'Post not found' });
 
-    if (!post) {
-      return res.status(404).json({
-        success: false,
-        message: 'Post not found'
-      });
-    }
-
-    // Check authorization
     const isOwner = post.user_id.toString() === req.user._id.toString();
-    const isAdmin = req.user.role === 'admin';
-    const isModerator = req.user.role === 'moderator';
+    const isGlobalAdmin = req.user.role === 'admin';
+    // NEW: Check if user is a moderator of THIS specific community
+    const isCommunityMod = post.comm_id.moderators.includes(req.user._id);
 
-    if (!isOwner && !isAdmin && !isModerator) {
-      return res.status(403).json({
-        success: false,
-        message: 'Not authorized to delete this post'
-      });
+    if (!isOwner && !isGlobalAdmin && !isCommunityMod) {
+      return res.status(403).json({ success: false, message: 'Not authorized' });
     }
 
-    // Soft delete
     post.status = 'removed';
     await post.save();
-
-    // Decrement community post count
-    await Community.findByIdAndUpdate(post.comm_id, {
-      $inc: { post_count: -1 }
-    });
-
-    res.status(200).json({
-      success: true,
-      message: 'Post deleted successfully'
-    });
+    res.status(200).json({ success: true, message: 'Post removed' });
   } catch (error) {
-    console.error('Delete post error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Error deleting post',
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
+export const pinPost = async (req, res) => {
+  try {
+    if (req.user.role !== 'moderator' && req.user.role !== 'admin') {
+      return res.status(403).json({ success: false, message: 'Only moderators can pin posts' });
+    }
+
+    const post = await Post.findById(req.params.id);
+    // Toggle the pin status (you'll need to add 'isPinned' to your Post.js model)
+    post.isPinned = !post.isPinned;
+    await post.save();
+
+    res.status(200).json({ success: true, data: post });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
 
 ================================================================================
 File: backend\src\controllers\userController.js
 ================================================================================
 
 
+import bcrypt from 'bcryptjs';
+import User from '../models/User.js';
+import Post from '../models/Post.js';
+
+export const deleteAccount = async (req, res) => {
+  try {
+    // 1. Remove user's posts (Optional: or mark as 'removed')
+    await Post.deleteMany({ user_id: req.user._id });
+    
+    // 2. Delete the user
+    await User.findByIdAndDelete(req.user._id);
+
+    res.status(200).json({ success: true, message: 'Account deleted' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const requestModerator = async (req, res) => {
+  try {
+    // In a full app, this would create a 'Request' document. 
+    // For now, we'll tag the user as 'pending_mod' or add a note.
+    await User.findByIdAndUpdate(req.user._id, { title: 'Moderator Applicant' });
+    res.status(200).json({ success: true, message: 'Application submitted to admins' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const user = await User.findById(req.user._id).select('+password_hash');
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password_hash);
+    if (!isMatch) {
+      return res.status(401).json({ success: false, message: 'Current password incorrect' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    user.password_hash = await bcrypt.hash(newPassword, salt);
+    await user.save();
+
+    res.status(200).json({ success: true, message: 'Password updated successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Get current user profile
+// @route   GET /api/users/profile
+// @access  Private
+export const getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select('-password_hash');
+    res.status(200).json({ success: true, data: user });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Update user profile
+// @route   PUT /api/users/profile
+// @access  Private
+// backend/src/controllers/userController.js
+
+export const updateProfile = async (req, res) => {
+  try {
+    // ADD firstName and lastName to this list
+    const { firstName, lastName, username, title, gender, location, phone, birthday, avatar, banner } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      // ADD them to the update object
+      { firstName, lastName, username, title, gender, location, phone, birthday, avatar, banner },
+      { new: true, runValidators: true }
+    ).select('-password_hash');
+
+    res.status(200).json({ success: true, data: updatedUser });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Follow or Unfollow a user
+// @route   POST /api/users/:id/follow
+// @access  Private
+export const followUser = async (req, res) => {
+  try {
+    const targetUser = await User.findById(req.params.id);
+    const currentUser = await User.findById(req.user._id);
+
+    if (!targetUser) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    if (targetUser._id.toString() === currentUser._id.toString()) {
+      return res.status(400).json({ success: false, message: 'You cannot follow yourself' });
+    }
+
+    // Check if already following
+    const isFollowing = currentUser.following.includes(targetUser._id);
+
+    if (isFollowing) {
+      // Unfollow logic
+      await User.findByIdAndUpdate(currentUser._id, { $pull: { following: targetUser._id } });
+      await User.findByIdAndUpdate(targetUser._id, { $pull: { followers: currentUser._id } });
+      
+      res.status(200).json({ success: true, message: 'Unfollowed successfully', isFollowing: false });
+    } else {
+      // Follow logic
+      await User.findByIdAndUpdate(currentUser._id, { $addToSet: { following: targetUser._id } });
+      await User.findByIdAndUpdate(targetUser._id, { $addToSet: { followers: currentUser._id } });
+      
+      res.status(200).json({ success: true, message: 'Followed successfully', isFollowing: true });
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// ADD THIS: New controller to view ANY user's profile by ID
+// backend/src/controllers/userController.js
+
+// ENSURE 'export' IS PRESENT AT THE START:
+export const getUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select('-password_hash');
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    res.status(200).json({ success: true, data: user });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error fetching profile' });
+  }
+};
+// @desc    Get suggested users for Right Sidebar
+// @route   GET /api/users/suggestions
+// @access  Private
+export const getSuggestedUsers = async (req, res) => {
+  try {
+    const users = await User.find({ _id: { $ne: req.user._id } })
+      .select('username avatar title role')
+      .limit(4);
+
+    res.status(200).json({ success: true, data: users });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error fetching suggestions' });
+  }
+};
+
+
+// @desc    Get top users by Green Karma
+// @route   GET /api/users/leaderboard
+// @access  Private
+export const getLeaderboard = async (req, res) => {
+  try {
+    const topUsers = await User.find({})
+      .select('firstName lastName username avatar green_karma title')
+      .sort({ green_karma: -1 }) // Sort by highest karma
+      .limit(10); // Get top 10
+
+    res.status(200).json({ success: true, data: topUsers });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error fetching leaderboard' });
+  }
+};
 
 ================================================================================
 File: backend\src\controllers\voteController.js
@@ -3472,39 +4056,14 @@ File: backend\src\models\Comment.js
 import mongoose from 'mongoose';
 
 const commentSchema = new mongoose.Schema({
-  post_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Post',
-    required: true
-  },
-  user_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  parent_comment_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Comment',
-    default: null
-  },
-  text: {
-    type: String,
-    required: [true, 'Comment text is required'],
-    maxlength: 1000
-  },
-  created_at: {
-    type: Date,
-    default: Date.now
-  }
-}, {
-  timestamps: true
-});
-
-// Index for faster queries
-commentSchema.index({ post_id: 1, created_at: -1 });
+  post_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Post', required: true },
+  user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  text: { type: String, required: true }, // Changed from content
+  parent_comment_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Comment', default: null }, // Changed from parent_id
+  likes: { type: Number, default: 0 }
+}, { timestamps: true });
 
 export default mongoose.model('Comment', commentSchema);
-
 
 ================================================================================
 File: backend\src\models\Community.js
@@ -3541,7 +4100,11 @@ const communitySchema = new mongoose.Schema({
   created_at: {
     type: Date,
     default: Date.now
-  }
+  },
+  moderators: [{ 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User' 
+  }],
 }, {
   timestamps: true
 });
@@ -3682,7 +4245,11 @@ const postSchema = new mongoose.Schema({
   created_at: {
     type: Date,
     default: Date.now
-  }
+  },
+  isPinned: { 
+    type: Boolean, 
+    default: false 
+  },
 }, {
   timestamps: true
 });
@@ -3702,6 +4269,8 @@ File: backend\src\models\User.js
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
+  firstName: { type: String, default: '' },
+  lastName: { type: String, default: '' },
   username: {
     type: String,
     required: [true, 'Username is required'],
@@ -3721,34 +4290,34 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Password is required'],
     minlength: 6
   },
-  bio: {
-    type: String,
-    maxlength: 500,
-    default: ''
-  },
-  avatar: {
-    type: String,
-    default: ''
-  },
-  green_karma: {
-    type: Number,
-    default: 0
-  },
+  // Add these to your userSchema in User.js
+  followers: [{ 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User' 
+  }],
+  following: [{ 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User' 
+  }],
+  // Added for the Profile View
+  title: { type: String, default: 'Environment Lover' }, 
+  gender: { type: String, default: 'Not specified' },
+  location: { type: String, default: 'Global' },
+  phone: { type: String, default: '' },
+  birthday: { type: String, default: '' },
+  bio: { type: String, maxlength: 500, default: '' },
+  avatar: { type: String, default: '' },
+  green_karma: { type: Number, default: 0 },
+  banner: { type: String, default: '' }, // For Base64 Banner
   role: {
     type: String,
     enum: ['user', 'moderator', 'admin'],
     default: 'user'
   },
-  created_at: {
-    type: Date,
-    default: Date.now
-  }
-}, {
-  timestamps: true
-});
+  created_at: { type: Date, default: Date.now }
+}, { timestamps: true });
 
 export default mongoose.model('User', userSchema);
-
 
 ================================================================================
 File: backend\src\models\Vote.js
@@ -3868,7 +4437,7 @@ File: backend\src\routes\posts.js
 ================================================================================
 
 import express from 'express';
-import { createPost, getPosts, getPostById, deletePost } from '../controllers/postController.js';
+import { createPost, getPosts, getPostById, deletePost, updatePost, pinPost } from '../controllers/postController.js';
 import { votePost, getUserVote } from '../controllers/voteController.js';
 import { protect } from '../middleware/auth.js';
 import { upload } from '../services/uploadService.js';
@@ -3882,6 +4451,8 @@ router.get('/:id', getPostById);
 // Protected routes
 router.post('/', protect, upload.single('image'), createPost);
 router.delete('/:id', protect, deletePost);
+router.put('/:id', protect, updatePost);
+router.put('/:id/pin', protect, pinPost);
 
 // Voting routes
 router.post('/:postId/vote', protect, votePost);
@@ -3894,7 +4465,32 @@ export default router;
 File: backend\src\routes\users.js
 ================================================================================
 
+// backend/src/routes/users.js
+import express from 'express';
+// ADD 'getUserById' TO THE LIST BELOW:
+import { getProfile, updateProfile, getSuggestedUsers, getUserById, followUser, getLeaderboard, changePassword, deleteAccount, requestModerator } from '../controllers/userController.js';
+import { protect } from '../middleware/auth.js';
 
+const router = express.Router();
+
+// Profile Routes
+router.get('/profile', protect, getProfile);
+router.put('/profile', protect, updateProfile);
+
+// Sidebar Suggestions
+router.get('/suggestions', protect, getSuggestedUsers);
+router.get('/leaderboard', protect, getLeaderboard);
+
+router.put('/change-password', protect, changePassword);
+router.post('/request-mod', protect, requestModerator);
+router.delete('/delete-account', protect, deleteAccount);
+
+// Public Profile Route
+router.get('/:id', protect, getUserById); 
+
+router.post('/:id/follow', protect, followUser);
+
+export default router;
 
 ================================================================================
 File: backend\src\services\aiService.js
@@ -3902,7 +4498,8 @@ File: backend\src\services\aiService.js
 
 import axios from 'axios';
 
-const AI_SERVICE_URL = process.env.AI_SERVICE_URL || 'http://localhost:8000';
+// .trim() removes any invisible Windows \r characters from the .env file
+const AI_SERVICE_URL = (process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000').trim();
 
 // Classify post content into SDG
 export const classifyPost = async (title, content, imageUrl = null) => {
@@ -3912,7 +4509,7 @@ export const classifyPost = async (title, content, imageUrl = null) => {
       content,
       image_url: imageUrl
     }, {
-      timeout: 5000 // 5 second timeout
+      timeout: 30000 
     });
 
     return {
@@ -3922,9 +4519,16 @@ export const classifyPost = async (title, content, imageUrl = null) => {
       impact_score: response.data.impact_score
     };
   } catch (error) {
-    console.error('AI Service Error:', error.message);
+    // Enhanced error logging to catch the exact issue
+    console.error('\n--- AI Service Communication Error ---');
+    console.error('URL Attempted:', `${AI_SERVICE_URL}/api/classify`);
+    console.error('Error Code:', error.code);
+    console.error('Error Message:', error.message);
+    if (error.response) {
+      console.error('Python Server Response:', error.response.data);
+    }
+    console.error('--------------------------------------\n');
     
-    // If AI service is down, return default values
     return {
       success: false,
       sdg_tag: null,
@@ -3946,7 +4550,6 @@ export const checkAIHealth = async () => {
     return { healthy: false, error: error.message };
   }
 };
-
 
 ================================================================================
 File: backend\src\services\impactScoreService.js
@@ -4020,56 +4623,119 @@ File: backend\src\services\uploadService.js
 ================================================================================
 
 import multer from 'multer';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Use Memory instead of Disk to get the buffer for MongoDB
+const storage = multer.memoryStorage();
 
-// Create uploads directory if it doesn't exist
-const uploadsDir = path.join(__dirname, '../../uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
-
-// Configure storage
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadsDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
-
-// File filter
-const fileFilter = (req, file, cb) => {
-  const allowedTypes = /jpeg|jpg|png|gif/;
-  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = allowedTypes.test(file.mimetype);
-
-  if (mimetype && extname) {
-    return cb(null, true);
-  } else {
-    cb(new Error('Only image files (jpeg, jpg, png, gif) are allowed'));
-  }
-};
-
-// Create multer upload instance
 export const upload = multer({
   storage: storage,
-  limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
-  },
-  fileFilter: fileFilter
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
 });
 
-// Helper to get image URL
-export const getImageUrl = (filename) => {
-  return `/uploads/${filename}`;
+// This helper now creates a string that MongoDB can store directly
+export const getImageUrl = (file) => {
+  if (!file) return '';
+  const b64 = Buffer.from(file.buffer).toString('base64');
+  return `data:${file.mimetype};base64,${b64}`;
 };
+
+================================================================================
+File: docs\MoSCoW_prioritisation.md
+================================================================================
+
+# MoSCoW Prioritization - Pulse Social Media Platform
+
+## Must Have (Critical for Release 1.0) 🔴
+
+These features are absolutely essential and non-negotiable for the MVP to function.
+
+| # | User Story | Priority | Justification |
+|---|------------|----------|---------------|
+| 1 | User Registration | Must Have | Core functionality - users need accounts to access platform |
+| 2 | User Login | Must Have | Authentication required for all features |
+| 3 | View User Profile | Must Have | Users must see their Green Karma scores and contribution history |
+| 5 | Protected Access with JWT | Must Have | Security requirement - protect user data and API endpoints |
+| 6 | Create Post | Must Have | Primary user action - core feature of the platform |
+| 7 | AI SDG Classification | Must Have | Core innovation that differentiates this platform - automatically tags posts |
+| 8 | Impact Score for Posts | Must Have | Core gamification feature - motivates user engagement |
+| 9 | Home Feed (Joined Communities) | Must Have | Users need to see content from their communities |
+| 12 | View All SDG Communities | Must Have | Users must discover and browse the 17 SDG communities |
+| 13 | Join/Leave Community | Must Have | Customization - users control their feed content |
+| 14 | View Community Feed | Must Have | Users need to view posts filtered by specific SDG |
+| 15 | Upvote/Downvote Posts | Must Have | Core engagement feature - Reddit-style interaction |
+| 16 | Add Comment to Post | Must Have | Social interaction - enables discussion and community building |
+| 24 | Image Upload to S3 | Must Have | Media support - posts need images for better engagement |
+
+**Total Must-Have: 14 stories**
+
+---
+
+## Should Have (Important but not blocking) 🟠
+
+These features enhance user experience significantly but the MVP can launch without them.
+
+| # | User Story | Priority | Justification |
+|---|------------|----------|---------------|
+| 4 | Edit User Profile | Should Have | Personalization feature - can be added post-launch |
+| 10 | Sort Feed (Hot/New/Top) | Should Have | UX improvement - default chronological sorting works initially |
+| 11 | Edit/Delete Own Post | Should Have | Content management - admin can handle manually at first |
+| 17 | Reply to Comments (Threaded) | Should Have | Enhanced discussion - flat comments work initially |
+| 18 | Delete Own Comment | Should Have | Content control - moderation can handle initially |
+| 19 | Assign Community Moderators | Should Have | Moderation setup - can be manual until user base grows |
+| 20 | Moderator Delete Post/Comment | Should Have | Content quality - admin can handle initially with small user base |
+| 22 | Admin User Management Dashboard | Should Have | Admin tools - command line admin works initially |
+
+**Total Should-Have: 8 stories**
+
+---
+
+## Could Have (Nice to have if time permits) 🟡
+
+Desirable features that add value but can wait for future releases.
+
+| # | User Story | Priority | Justification |
+|---|------------|----------|---------------|
+| 21 | Moderator Mute User | Could Have | Advanced moderation - ban feature sufficient initially |
+| 23 | Configure Impact Score Weights | Could Have | Admin flexibility - hardcoded weights work for Release 1.0 |
+| 25 | AI Service Health Visibility | Could Have | Monitoring feature - server logs sufficient initially |
+
+**Total Could-Have: 3 stories**
+
+---
+
+## Won't Have (Future releases) ⚪
+
+Features explicitly excluded from Release 1.0 per project scope and timeline constraints.
+
+| Feature | Reason for Exclusion |
+|---------|---------------------|
+| Advanced Analytics Dashboard | Complex feature requiring data visualization - planned for Release 2.0  |
+| Push Notifications | Requires real-time infrastructure setup - out of scope for 3-month timeline  |
+| Multi-language Support | AI model currently trained for English only  |
+| Email Verification System | Optional dependency - basic auth sufficient for MVP  |
+| Real-time Chat/Messaging | Not core to SDG tracking mission - future consideration  |
+| Mobile App (iOS/Android) | Web responsive design sufficient - native apps in Release 2.0  |
+
+---
+
+## Summary
+
+| Priority | Count | % of Total | 
+|----------|-------|------------|
+| **Must Have** | 14 | 56% | 
+| **Should Have** | 8 | 32% | 
+| **Could Have** | 3 | 12% |
+| **Won't Have** | 6 | N/A | 
+| **Total Stories** | **25** | **100%** | 
+
+---
+
+**Minimum Viable Product (MVP):**
+The 14 **Must-Have** stories alone constitute a functional, deployable platform that meets the core project objectives of SDG classification and gamification.
+
+---
+
+
 
 
 ================================================================================
@@ -8333,28 +8999,58 @@ export default defineConfig({
 File: frontend\src\App.jsx
 ================================================================================
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import ProtectedRoute from './components/ProtectedRoute';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
+import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import CreatePost from "./pages/CreatePost";
+import BrowseCommunities from "./pages/BrowseCommunities";
+import CommunityView from "./pages/CommunityView";
+import Layout from "./components/Layout";
+import Profile from "./pages/Profile";
+import EditProfile from "./pages/EditProfile";
+import Leaderboard from "./pages/Leaderboard";
+import Settings from "./pages/Settings";
+
+// 1. We create a wrapper that tells React Router where to put the page content inside your Layout
+const LayoutWrapper = () => {
+  return (
+    <Layout>
+      <Outlet /> 
+    </Layout>
+  );
+};
 
 function App() {
   return (
     <Router>
       <AuthProvider>
         <Routes>
+          
+          {/* ========================================= */}
+          {/* ZONE 1: PUBLIC ROUTES (No Layout/Sidebars) */}
+          {/* ========================================= */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route 
-            path="/" 
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            } 
-          />
+
+          {/* ========================================= */}
+          {/* ZONE 2: PROTECTED ROUTES (With Layout)     */}
+          {/* ========================================= */}
+          <Route element={<LayoutWrapper />}>
+            <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+            <Route path="/explore" element={<ProtectedRoute><BrowseCommunities /></ProtectedRoute>} />
+            <Route path="/community/:id" element={<ProtectedRoute><CommunityView /></ProtectedRoute>} />
+            <Route path="/post" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
+            <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
+            
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/profile/edit" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
+            <Route path="/profile/:userId" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+          </Route>
+
         </Routes>
       </AuthProvider>
     </Router>
@@ -8362,7 +9058,6 @@ function App() {
 }
 
 export default App;
-
 
 ================================================================================
 File: frontend\src\index.css
@@ -8414,6 +9109,587 @@ createRoot(document.getElementById('root')).render(
   </StrictMode>,
 )
 
+
+================================================================================
+File: frontend\src\components\CreatePostWidget.jsx
+================================================================================
+
+import React, { useState } from 'react';
+import api from '../services/api';
+import { FiImage, FiCpu } from 'react-icons/fi';
+
+const CreatePostWidget = ({ onPostCreated }) => {
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!title.trim() || !content.trim()) {
+      alert("Please fill in what you did!");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      // Notice: We no longer send comm_id!
+      const response = await api.post('/posts', { title, content });
+
+      if (response.data.success) {
+        setTitle('');
+        setContent('');
+        onPostCreated(); // Refresh feed
+      }
+    } catch (error) {
+      console.error('Error creating post:', error);
+      alert('Failed to create post. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 mb-6 border-t-4 border-[#4ADE80]">
+      <div className="flex gap-3 mb-4">
+        <img 
+          src="https://ui-avatars.com/api/?name=User&background=random" 
+          alt="Current User" 
+          className="w-10 h-10 rounded-full object-cover" 
+        />
+        <input
+          type="text"
+          placeholder="Title of your sustainable action..."
+          className="w-full bg-gray-50 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#4ADE80] border border-transparent transition"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          disabled={isSubmitting}
+        />
+      </div>
+      
+      <textarea
+        placeholder="Describe what you did! The Pulse AI will automatically classify it into the correct SDG community..."
+        className="w-full bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#4ADE80] border border-transparent transition resize-none min-h-[80px] mb-3"
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        disabled={isSubmitting}
+      />
+
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-gray-100 pt-3">
+        <button type="button" className="p-2 text-gray-400 hover:text-[#4ADE80] hover:bg-green-50 rounded-full transition">
+          <FiImage className="text-lg" />
+        </button>
+
+        <button
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+          className={`flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-bold text-white transition-all w-full sm:w-auto justify-center ${
+            isSubmitting ? 'bg-green-300 cursor-wait' : 'bg-[#4ADE80] hover:bg-green-500 shadow-md shadow-green-200'
+          }`}
+        >
+          {isSubmitting ? (
+            <><FiCpu className="animate-pulse" /> AI is classifying...</>
+          ) : (
+            'Post Action'
+          )}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default CreatePostWidget;
+
+================================================================================
+File: frontend\src\components\Layout.jsx
+================================================================================
+
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import api from '../services/api';
+import { 
+  FiHome, FiUser, FiCompass, FiSettings, 
+  FiBell, FiMessageSquare, FiChevronDown, FiPlus, FiEdit3, FiAward
+} from 'react-icons/fi';
+
+const Layout = ({ children }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user, logout } = useAuth(); // Brought in logout here
+  const [suggestedUsers, setSuggestedUsers] = useState([]);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+
+  // Fetch dynamic right sidebar data
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      try {
+        const res = await api.get('/users/suggestions'); 
+        if (res.data.success) {
+          setSuggestedUsers(res.data.data);
+        }
+      } catch (err) {
+        console.error("Error fetching suggestions", err);
+      } finally {
+        setLoadingUsers(false);
+      }
+    };
+    fetchSuggestions();
+  }, []);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+  const navItems = [
+    { name: 'Home', path: '/', match: '/', icon: <FiHome />},
+    { 
+      name: 'Profile', 
+      path: user?._id ? `/profile/${user._id}` : '/profile', 
+      match: '/profile', icon: <FiUser />
+    },
+    { name: 'Explore Communities', path: '/explore', match: '/explore', icon: <FiCompass />},
+    { name: 'Leaderboard', path: '/leaderboard', match: '/leaderboard', icon: <FiAward /> },
+    { name: 'Settings', path: '/settings', match: '/settings', icon: <FiSettings /> },
+  ];
+
+  // Helper to safely render avatars
+  const getSafeAvatar = (avatarStr, username) => {
+    if (avatarStr && (avatarStr.startsWith('http') || avatarStr.startsWith('data:'))) {
+      return avatarStr;
+    }
+    return `https://ui-avatars.com/api/?name=${username || 'User'}`;
+  };
+
+  return (
+    <div className="min-h-screen bg-[#F8F9FA] text-gray-800 font-sans flex justify-center">
+      
+      {/* ================= GLOBAL HEADER ================= */}
+      <div className="fixed top-0 right-0 w-full flex justify-end items-center p-4 bg-[#F8F9FA] z-20 pr-8 xl:pr-12 gap-4">
+        <button className="p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition">
+          <FiMessageSquare className="text-gray-700" />
+        </button>
+        <button className="p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition">
+          <FiBell className="text-gray-700" />
+        </button>
+        
+        <div className="flex items-center gap-4 ml-4">
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate(user?._id ? `/profile/${user._id}` : '/profile')}>
+            <img 
+              src={getSafeAvatar(user?.avatar, user?.username)} 
+              alt="Profile" 
+              className="w-10 h-10 rounded-full object-cover" 
+            />
+            <span className="font-semibold text-sm">{user?.username || 'Loading...'}</span>
+            <FiChevronDown className="text-gray-500 text-sm" />
+          </div>
+          <button 
+            onClick={handleLogout}
+            className="text-xs font-bold text-gray-500 hover:text-red-500 transition px-2 py-1 rounded-md hover:bg-red-50"
+            title="Logout"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+
+      <div className="max-w-[1400px] w-full flex flex-col lg:flex-row gap-6 px-4 pt-20 pb-8">
+        
+        {/* ================= LEFT SIDEBAR ================= */}
+        <div className="hidden lg:flex flex-col w-1/4 max-w-[280px] sticky top-20 h-[calc(100vh-80px)] overflow-y-auto">
+          <div className="mb-8 px-4 cursor-pointer" onClick={() => navigate('/')}>
+            <h1 className="text-4xl font-extrabold text-[#4ADE80] tracking-tight">Pulse</h1>
+          </div>
+
+          <nav className="flex flex-col gap-2 mb-8 px-2">
+            {navItems.map((item) => {
+              const isActive = item.match === '/' 
+                ? location.pathname === '/' 
+                : location.pathname.startsWith(item.match);
+
+              return (
+                <button
+                  key={item.name}
+                  onClick={() => navigate(item.path)}
+                  className={`flex items-center gap-4 px-4 py-3 rounded-lg transition text-left w-full font-semibold ${
+                    isActive 
+                    ? 'bg-gray-100 text-[#4ADE80]' 
+                    : 'text-gray-600 hover:bg-gray-100'
+                  }`}
+                >
+                  <span className="text-xl">{item.icon}</span> {item.name}
+                </button>
+              );
+            })}
+          </nav>
+
+          <div className="px-4">
+            <button 
+              onClick={() => navigate('/post')}
+              className="w-full py-3 bg-[#4ADE80] text-white font-bold rounded-xl shadow-lg shadow-green-200 hover:bg-green-500 transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5"
+            >
+              <FiEdit3 className="text-lg" /> Share Impact
+            </button>
+          </div>
+        </div>
+
+        {/* ================= MAIN CONTENT ================= */}
+        <div className="flex-1 max-w-[600px] w-full mx-auto">
+          {children}
+        </div>
+
+        {/* ================= RIGHT SIDEBAR ================= */}
+        <div className="hidden xl:flex flex-col w-1/4 max-w-[280px] sticky top-20 h-[calc(100vh-80px)] gap-6">
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+            <h3 className="text-sm font-bold text-[#4ADE80] mb-4 uppercase tracking-wide">People you may know</h3>
+            <div className="flex flex-col gap-4">
+              {loadingUsers ? (
+                <p className="text-xs text-gray-400">Finding members...</p>
+              ) : (
+                suggestedUsers.map(u => (
+                  <div key={u._id} className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <img 
+                        src={getSafeAvatar(u.avatar, u.username)} 
+                        className="w-10 h-10 rounded-full object-cover" 
+                        alt="user" 
+                      />
+                      <div>
+                        <h4 className="text-xs font-bold text-gray-800">{u.username}</h4>
+                        <p className="text-[10px] text-gray-400">{u.role || 'Member'}</p>
+                      </div>
+                    </div>
+                    <button className="text-gray-400 hover:text-[#4ADE80] transition">
+                      <FiPlus className="text-lg" />
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+            <button className="mt-4 text-xs font-bold text-[#4ADE80] hover:underline uppercase">See more</button>
+          </div>
+
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+            <h3 className="text-sm font-bold text-[#4ADE80] mb-4 uppercase tracking-wide">Suggested Communities</h3>
+            <p className="text-[10px] text-gray-400 italic">Based on your recent sustainability stories.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+export default Layout;
+
+================================================================================
+File: frontend\src\components\PostCard.jsx
+================================================================================
+
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
+import { useAuth } from '../context/AuthContext';
+import { 
+  FiArrowUp, FiArrowDown, FiMessageCircle, FiSend, FiX, 
+  FiMoreVertical, FiEdit2, FiTrash2, FiMapPin 
+} from 'react-icons/fi';
+
+// Updated ThreadedComment to support moderator deletion
+const ThreadedComment = ({ comment, depth = 0, onReply, onDelete, currentUser }) => {
+  const isCommentOwner = currentUser?._id === comment.user_id?._id || currentUser?.id === comment.user_id?._id;
+  const isModerator = currentUser?.role === 'moderator' || currentUser?.role === 'admin';
+
+  return (
+    <div className={`relative ${depth > 0 ? 'ml-10 mt-3' : 'mt-4'}`}>
+      {depth > 0 && <div className="absolute -top-10 -left-6 w-5 h-14 border-l-2 border-b-2 border-gray-100 rounded-bl-xl pointer-events-none" />}
+      <div className="flex gap-3">
+        <img src={comment.user_id?.avatar || `https://ui-avatars.com/api/?name=${comment.user_id?.username}`} className="w-8 h-8 rounded-full z-10 bg-white object-cover" alt="user" />
+        <div className="flex-1">
+          <div className="bg-gray-50 p-3 rounded-2xl rounded-tl-none border border-gray-100 relative group">
+            <span className="font-bold text-[#FF6B6B] text-xs block mb-1">{comment.user_id?.username}</span>
+            <p className="text-sm text-gray-700 leading-relaxed">{comment.text}</p>
+            
+            {/* Moderator/Owner Delete Button for Comments */}
+            {(isCommentOwner || isModerator) && (
+              <button 
+                onClick={() => onDelete(comment._id)}
+                className="absolute top-2 right-2 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <FiX size={14} />
+              </button>
+            )}
+          </div>
+          <div className="flex gap-4 mt-1 ml-2 text-[10px] font-bold text-gray-400 uppercase tracking-tight">
+            <button className="hover:text-gray-600 transition">Like</button>
+            <button onClick={() => onReply(comment)} className="hover:text-[#4ADE80] transition">Reply</button>
+          </div>
+        </div>
+      </div>
+      {comment.replies?.map(reply => (
+        <ThreadedComment 
+          key={reply._id} 
+          comment={reply} 
+          depth={depth + 1} 
+          onReply={onReply} 
+          onDelete={onDelete}
+          currentUser={currentUser}
+        />
+      ))}
+    </div>
+  );
+};
+
+const PostCard = ({ post }) => {
+  const navigate = useNavigate();
+  const { user } = useAuth(); 
+  
+  const authId = user?._id || user?.id;
+  const authorId = post.user_id?._id || post.user_id;
+  const isOwner = authId === authorId;
+  const isModerator = user?.role === 'moderator' || user?.role === 'admin';
+
+  const [votes, setVotes] = useState(post.vote_count || 0);
+  const [showComments, setShowComments] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [inputText, setInputText] = useState('');
+  const [replyingTo, setReplyingTo] = useState(null);
+  const [userVote, setUserVote] = useState(0);
+
+  const [isDeleted, setIsDeleted] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editData, setEditData] = useState({ title: post.title, content: post.content });
+  const [currentPost, setCurrentPost] = useState(post);
+
+  const fetchComments = async () => {
+    try {
+      const res = await api.get(`/posts/${post._id}/comments`);
+      if (res.data.success) setComments(res.data.data);
+    } catch (err) { console.error(err); }
+  };
+
+  const handleUserClick = (e) => {
+    e.stopPropagation();
+    if (authorId) navigate(`/profile/${authorId}`);
+  };
+
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+    if (!inputText.trim()) return;
+    try {
+      const res = await api.post(`/posts/${post._id}/comments`, { text: inputText, parent_comment_id: replyingTo?._id || null });
+      if (res.data.success) {
+        setInputText(''); setReplyingTo(null); fetchComments();
+      }
+    } catch (err) { console.error(err); }
+  };
+
+  const handleCommentDelete = async (commentId) => {
+    if (window.confirm("Delete this comment?")) {
+      try {
+        const res = await api.delete(`/comments/${commentId}`);
+        if (res.data.success) fetchComments();
+      } catch (err) { alert("Failed to delete comment"); }
+    }
+  };
+
+  useEffect(() => {
+    const fetchMyVote = async () => {
+      try {
+        const res = await api.get(`/posts/${post._id}/vote`);
+        if (res.data.success && res.data.data) setUserVote(res.data.data.vote_type);
+      } catch (err) { console.error(err); }
+    };
+    fetchMyVote();
+  }, [post._id]);
+
+  const handleVote = async (type) => {
+    try {
+      const res = await api.post(`/posts/${post._id}/vote`, { vote_type: type });
+      if (res.data.success) {
+        if (res.data.action === 'created') { setVotes(prev => prev + type); setUserVote(type); } 
+        else if (res.data.action === 'removed') { setVotes(prev => prev - type); setUserVote(0); } 
+        else if (res.data.action === 'updated') { setVotes(prev => prev + (type * 2)); setUserVote(type); }
+      }
+    } catch (err) { console.error("Vote failed", err); }
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const res = await api.put(`/posts/${post._id}`, editData);
+      if (res.data.success) {
+        setCurrentPost({ ...currentPost, title: editData.title, content: editData.content });
+        setIsEditing(false);
+        setShowDropdown(false);
+      }
+    } catch (err) { alert("Failed to update post"); }
+  };
+
+  const handleDelete = async () => {
+    const message = isModerator && !isOwner 
+      ? "MODERATOR ACTION: Delete this post permanently?" 
+      : "Are you sure you want to delete this post?";
+    
+    if (window.confirm(message)) {
+      try {
+        const res = await api.delete(`/posts/${post._id}`);
+        if (res.data.success) setIsDeleted(true);
+      } catch (err) { alert("Failed to delete post"); }
+    }
+  };
+
+  const handlePin = async () => {
+    try {
+      const res = await api.put(`/posts/${post._id}/pin`);
+      if (res.data.success) {
+        setCurrentPost({ ...currentPost, isPinned: res.data.data.isPinned });
+        setShowDropdown(false);
+      }
+    } catch (err) { alert("Failed to pin post"); }
+  };
+
+  if (isDeleted) return null;
+
+  return (
+    <div className={`bg-white p-5 rounded-2xl shadow-sm border mb-6 transition-all relative ${currentPost.isPinned ? 'border-[#4ADE80] ring-1 ring-[#4ADE80]/20' : 'border-gray-100'}`}>
+      
+      {/* Pinned Badge */}
+      {currentPost.isPinned && (
+        <div className="flex items-center gap-1 text-[10px] font-bold text-[#4ADE80] uppercase tracking-widest mb-2">
+          <FiMapPin size={12} /> Pinned by Moderator
+        </div>
+      )}
+
+      <div className="flex justify-between items-start mb-4">
+        <div className="flex items-center gap-3 cursor-pointer" onClick={handleUserClick}>
+          <img src={currentPost.user_id?.avatar || `https://ui-avatars.com/api/?name=${currentPost.user_id?.username}`} className="w-12 h-12 rounded-full object-cover" alt="User" />
+          <div className="text-sm">
+            <span className="font-bold text-gray-800">{currentPost.user_id?.username || 'Pulse User'}</span>
+            <span className="text-gray-400 mx-2">▸</span>
+            <span className="font-bold text-[#4ADE80]">{currentPost.comm_id?.name || 'General'}</span>
+            <p className="text-[10px] text-gray-400 mt-0.5">{new Date(currentPost.createdAt).toLocaleDateString()}</p>
+          </div>
+        </div>
+
+        {/* MODERATOR / OWNER OPTIONS */}
+        {(isOwner || isModerator) && (
+          <div className="relative">
+            <button onClick={() => setShowDropdown(!showDropdown)} className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-50 transition">
+              <FiMoreVertical />
+            </button>
+            
+            {showDropdown && (
+              <div className="absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-lg border border-gray-100 z-20 overflow-hidden">
+                {isOwner && (
+                  <button 
+                    onClick={() => { setIsEditing(true); setShowDropdown(false); }} 
+                    className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                  >
+                    <FiEdit2 className="text-gray-400"/> Edit Post
+                  </button>
+                )}
+                {isModerator && (
+                  <button 
+                    onClick={handlePin} 
+                    className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                  >
+                    <FiMapPin className={currentPost.isPinned ? 'text-[#4ADE80]' : 'text-gray-400'}/> 
+                    {currentPost.isPinned ? 'Unpin Post' : 'Pin Post'}
+                  </button>
+                )}
+                <button 
+                  onClick={handleDelete} 
+                  className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                >
+                  <FiTrash2 className="text-red-400"/> {isModerator && !isOwner ? 'Remove Post' : 'Delete Post'}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {isEditing ? (
+        <div className="mb-4 space-y-3">
+          <input 
+            type="text" 
+            value={editData.title} 
+            onChange={(e) => setEditData({...editData, title: e.target.value})}
+            className="w-full font-bold text-gray-900 mb-2 p-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4ADE80]"
+          />
+          <textarea 
+            value={editData.content} 
+            onChange={(e) => setEditData({...editData, content: e.target.value})}
+            className="w-full text-gray-700 text-sm leading-relaxed p-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4ADE80] min-h-[100px]"
+          />
+          <div className="flex gap-2 justify-end">
+            <button onClick={() => setIsEditing(false)} className="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 rounded-lg transition">Cancel</button>
+            <button onClick={handleUpdate} className="px-4 py-2 text-sm bg-[#4ADE80] text-white font-bold rounded-lg hover:bg-green-500 transition">Save Changes</button>
+          </div>
+        </div>
+      ) : (
+        <>
+          <h3 className="font-bold text-gray-900 mb-2">{currentPost.title}</h3>
+          <p className="text-gray-700 text-sm mb-4 leading-relaxed whitespace-pre-wrap">{currentPost.content}</p>
+        </>
+      )}
+
+      {currentPost.image_url && (
+        <div className="rounded-xl overflow-hidden mb-4 border border-gray-100">
+          <img src={currentPost.image_url} alt="Action proof" className="w-full h-auto max-h-[400px] object-cover" />
+        </div>
+      )}
+
+      <div className="flex items-center justify-between border-t border-gray-50 pt-4 mt-4">
+        <div className="flex items-center bg-gray-50 rounded-full px-1 border border-gray-200">
+          <button onClick={() => handleVote(1)} className={`p-2 rounded-full transition ${userVote === 1 ? 'bg-green-100 text-[#4ADE80]' : 'text-gray-500 hover:text-[#4ADE80] hover:bg-green-50'}`}>
+            <FiArrowUp className="text-lg" />
+          </button>
+          <span className={`font-bold text-sm px-2 ${userVote === 1 ? 'text-[#4ADE80]' : userVote === -1 ? 'text-red-400' : 'text-gray-700'}`}>{votes}</span>
+          <button onClick={() => handleVote(-1)} className={`p-2 rounded-full transition ${userVote === -1 ? 'text-red-400 bg-red-100' : 'text-gray-500 hover:text-red-400 hover:bg-red-50'}`}>
+            <FiArrowDown className="text-lg" />
+          </button>
+        </div>
+
+        <button onClick={() => { if(!showComments) fetchComments(); setShowComments(!showComments); }} className="flex items-center gap-2 text-sm text-gray-500 font-semibold hover:text-[#4ADE80] transition">
+          <FiMessageCircle /> <span>{currentPost.comment_count || 0} Comments</span>
+        </button>
+      </div>
+
+      {showComments && (
+        <div className="mt-6 pt-4 border-t border-gray-100">
+          <h4 className="text-[#FF6B6B] font-bold text-xs uppercase tracking-widest mb-4">Comments</h4>
+          <form onSubmit={handleCommentSubmit} className="mb-6">
+            {replyingTo && (
+              <div className="flex justify-between items-center bg-blue-50 px-3 py-1 rounded-t-xl border-x border-t border-blue-100">
+                <span className="text-[10px] font-bold text-blue-500 uppercase">Replying to {replyingTo.user_id?.username}</span>
+                <button type="button" onClick={() => setReplyingTo(null)} className="text-blue-500"><FiX size={12} /></button>
+              </div>
+            )}
+            <div className="flex gap-2">
+              <input type="text" placeholder={replyingTo ? "Write a reply..." : "Add a comment..."} className={`flex-1 bg-gray-50 border border-gray-100 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#4ADE80] ${replyingTo ? 'rounded-b-xl' : 'rounded-xl'}`} value={inputText} onChange={(e) => setInputText(e.target.value)} />
+              <button type="submit" className="bg-[#4ADE80] text-white px-4 py-2 rounded-xl"><FiSend /></button>
+            </div>
+          </form>
+          <div className="space-y-4">
+            {comments.map(c => (
+              <ThreadedComment 
+                key={c._id} 
+                comment={c} 
+                onReply={setReplyingTo} 
+                onDelete={handleCommentDelete}
+                currentUser={user}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default PostCard;
 
 ================================================================================
 File: frontend\src\components\ProtectedRoute.jsx
@@ -8503,42 +9779,588 @@ export const useAuth = () => {
 
 
 ================================================================================
+File: frontend\src\pages\BrowseCommunities.jsx
+================================================================================
+
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  FiHome,
+  FiUser,
+  FiCompass,
+  FiSettings,
+  FiBell,
+  FiMessageSquare,
+  FiChevronDown,
+  FiPlus,
+} from "react-icons/fi";
+
+const BrowseCommunities = () => {
+  const navigate = useNavigate();
+
+  // SDG Data Mapping: Colors, Titles, and Numbers
+  const sdgGoals = [
+    { id: 1, title: "No Poverty", color: "bg-[#E5243B]" },
+    { id: 2, title: "Zero Hunger", color: "bg-[#DDA63A]" },
+    { id: 3, title: "Good Health", color: "bg-[#4C9F38]" },
+    { id: 4, title: "Quality Education", color: "bg-[#C5192D]" },
+    { id: 5, title: "Gender Equality", color: "bg-[#FF3A21]" },
+    { id: 6, title: "Clean Water", color: "bg-[#26BDE2]" },
+    { id: 7, title: "Affordable Energy", color: "bg-[#FCC30B]" },
+    { id: 8, title: "Decent Work", color: "bg-[#A21942]" },
+    { id: 9, title: "Industry & Innovation", color: "bg-[#FD6925]" },
+    { id: 10, title: "Reduced Inequalities", color: "bg-[#DD1367]" },
+    { id: 11, title: "Sustainable Cities", color: "bg-[#FD9D24]" },
+    { id: 12, title: "Responsible Consumption", color: "bg-[#BF8B2E]" },
+    { id: 13, title: "Climate Action", color: "bg-[#3F7E44]" },
+    { id: 14, title: "Life Below Water", color: "bg-[#0A97D9]" },
+    { id: 15, title: "Life on Land", color: "bg-[#56C02B]" },
+    { id: 16, title: "Peace & Justice", color: "bg-[#00689D]" },
+    { id: 17, title: "Partnerships", color: "bg-[#19486A]" },
+  ];
+
+  return (
+    <div className="flex flex-col gap-6 w-full">
+      <h2 className="text-3xl font-extrabold text-[#4ADE80]">
+        Browse Communities
+      </h2>
+
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {sdgGoals.map((goal) => (
+          <div
+            key={goal.id}
+            onClick={() => navigate(`/community/${goal.id}`)}
+            className={`${goal.color} aspect-square rounded-lg p-4 flex flex-col justify-between cursor-pointer hover:scale-[1.03] hover:brightness-110 transition-all shadow-md group`}
+          >
+            <div className="flex justify-between items-start text-white">
+              <span className="text-3xl font-black opacity-90">{goal.id}</span>
+              <span className="text-[10px] font-bold uppercase text-right leading-tight max-w-[60%]">
+                {goal.title}
+              </span>
+            </div>
+            {/* Simplified Icon Placeholder - Replaces icons with Goal Number for clean look */}
+            <div className="flex justify-center items-center flex-1">
+              <div className="w-16 h-16 border-4 border-white/20 rounded-full flex items-center justify-center">
+                <span className="text-white text-xs font-bold opacity-40">
+                  SDG {goal.id}
+                </span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default BrowseCommunities;
+
+
+================================================================================
+File: frontend\src\pages\CommunityView.jsx
+================================================================================
+
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import api from '../services/api';
+import PostCard from '../components/PostCard';
+
+const CommunityView = () => {
+  const { id } = useParams(); // Get the SDG number from URL
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCommunityPosts = async () => {
+      try {
+        // You might need an endpoint like /api/posts/community/:id 
+        // Or filter the /api/posts result on the frontend
+        const res = await api.get('/posts'); 
+        if (res.data.success) {
+          const filtered = res.data.data.filter(post => post.sdg_tag === parseInt(id));
+          setPosts(filtered);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCommunityPosts();
+  }, [id]);
+
+  return (
+    <div className="min-h-screen bg-[#F8F9FA] pt-20 px-4">
+       <div className="max-w-2xl mx-auto">
+          <h2 className="text-2xl font-bold mb-6">SDG {id} Community Feed</h2>
+          {loading ? <p>Loading...</p> : posts.map(post => <PostCard key={post._id} post={post} />)}
+       </div>
+    </div>
+  );
+};
+
+export default CommunityView;
+
+================================================================================
+File: frontend\src\pages\CreatePost.jsx
+================================================================================
+
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
+import { 
+  FiHome, FiUser, FiCompass, FiSettings, 
+  FiBell, FiMessageSquare, FiChevronDown, FiImage, FiCpu, FiArrowLeft, FiX
+} from 'react-icons/fi';
+
+const getSDGName = (tag) => {
+  const sdgs = [
+    "No Poverty", "Zero Hunger", "Good Health", "Quality Education",
+    "Gender Equality", "Clean Water", "Affordable Energy", "Decent Work",
+    "Infrastructure", "Reduced Inequality", "Sustainable Cities", "Consumption",
+    "Climate Action", "Life Below Water", "Life on Land", "Justice", "Partnerships"
+  ];
+  return sdgs[tag - 1] || "Sustainable Action";
+};
+
+const ScoreGauge = ({ score }) => {
+  const radius = 40;
+  const circumference = Math.PI * radius;
+  const strokeDashoffset = circumference - (score / 100) * circumference;
+
+  return (
+    <div className="relative w-full max-w-[200px] mx-auto flex flex-col items-center">
+      <svg viewBox="0 0 100 55" className="w-full h-auto overflow-visible">
+        <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#E2E8F0" strokeWidth="12" strokeLinecap="round" />
+        <path 
+          d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#4ADE80" strokeWidth="12" strokeLinecap="round"
+          strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} className="transition-all duration-1000 ease-out"
+        />
+        <text x="50" y="45" textAnchor="middle" className="text-2xl font-black fill-gray-800">{score}</text>
+      </svg>
+      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-1">Impact Rating</p>
+    </div>
+  );
+};
+
+const CreatePost = () => {
+  const navigate = useNavigate();
+  
+  // Form State
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [imageFile, setImageFile] = useState(null);       // Store the actual file
+  const [imagePreview, setImagePreview] = useState(null); // Store the local preview URL
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Results State
+  const [postResult, setPostResult] = useState(null);
+
+  // Handle Image Selection
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file)); // Creates a temporary local URL to show the user
+    }
+  };
+
+  // Remove Selected Image
+  const clearImage = (e) => {
+    e.stopPropagation(); // Prevents triggering the upload click again
+    setImageFile(null);
+    setImagePreview(null);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!title.trim() || !content.trim()) return alert("Please fill in both title and content!");
+
+    setIsSubmitting(true);
+    try {
+      // Create FormData object to handle the file upload
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('content', content);
+      
+      // 'image' must match the field name your Node.js multer middleware expects 
+      // e.g., upload.single('image')
+      if (imageFile) {
+        formData.append('image', imageFile); 
+      }
+
+      // Send the request. Axios automatically sets the correct multipart/form-data headers
+      const response = await api.post('/posts', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      if (response.data.success) {
+        setPostResult(response.data.data);
+      }
+    } catch (error) {
+      console.error('Error creating post:', error);
+      alert('Failed to process post. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-6 w-full">
+          
+          {!postResult ? (
+            /* ================= STATE 1: SHARE YOUR IMPACT FORM ================= */
+            <div className="bg-white w-full max-w-3xl p-8 rounded-[12px] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] h-fit">
+              <h2 className="text-3xl font-extrabold text-[#4ADE80] mb-8">Share Your Impact</h2>
+              
+              {/* INTERACTIVE IMAGE DROPZONE */}
+              <div 
+                className="w-full h-64 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100 transition cursor-pointer mb-6 relative overflow-hidden group"
+                onClick={() => document.getElementById('imageUpload').click()}
+              >
+                <input 
+                  type="file" 
+                  id="imageUpload" 
+                  className="hidden" 
+                  accept="image/*" 
+                  onChange={handleImageChange} 
+                  disabled={isSubmitting}
+                />
+                
+                {imagePreview ? (
+                  <>
+                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                    {/* Dark overlay with an 'X' to remove image */}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <button 
+                        onClick={clearImage}
+                        className="bg-white text-red-500 p-2 rounded-full hover:bg-red-50 hover:scale-110 transition-transform"
+                        title="Remove Image"
+                      >
+                        <FiX className="text-xl" />
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <FiImage className="text-4xl text-gray-400 mb-3" />
+                    <p className="text-gray-500 font-medium text-sm">Click to upload image from device</p>
+                  </>
+                )}
+              </div>
+
+              {/* Title & Content Inputs */}
+              <input 
+                type="text"
+                placeholder="Give your action a short title..."
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full border border-gray-200 rounded-xl p-4 mb-4 focus:outline-none focus:ring-2 focus:ring-[#4ADE80] bg-gray-50"
+                disabled={isSubmitting}
+              />
+              <textarea 
+                placeholder="Tell your Sustainability Story..."
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                className="w-full border border-gray-200 rounded-xl p-4 h-40 resize-none focus:outline-none focus:ring-2 focus:ring-[#4ADE80] bg-gray-50"
+                disabled={isSubmitting}
+              />
+
+              <div className="mt-6 flex justify-end">
+                <button 
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  className={`flex items-center gap-2 px-8 py-3 rounded-xl text-white font-bold transition ${isSubmitting ? 'bg-green-300 cursor-wait' : 'bg-[#4ADE80] hover:bg-green-500'}`}
+                >
+                  {isSubmitting ? <><FiCpu className="animate-pulse" /> AI is Analyzing...</> : 'Analyze Impact'}
+                </button>
+              </div>
+            </div>
+
+          ) : (
+
+            /* ================= STATE 2: POSTSCORE BY AI RESULTS ================= */
+            <div className="bg-white w-full max-w-5xl p-8 rounded-[12px] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] h-fit">
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="text-3xl font-extrabold text-[#4ADE80]">PostScore by AI</h2>
+                <button onClick={() => navigate('/')} className="text-gray-400 hover:text-gray-800 flex items-center gap-2 font-medium transition">
+                  Go to Feed <FiArrowLeft className="rotate-180" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                {/* Left Column - Post Preview */}
+                <div className="md:col-span-2 flex flex-col gap-4">
+                  {/* Dynamic Image Rendering! */}
+                  {postResult.image_url && (
+                    <div className="w-full h-80 bg-gray-100 rounded-xl overflow-hidden relative flex items-center justify-center">
+                      <img 
+                        src={postResult.image_url} 
+                        alt="Action proof" 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+                  
+                  <div className="border border-gray-200 rounded-xl p-5 bg-white">
+                    <h3 className="font-bold text-lg mb-2 text-gray-800">{postResult.title}</h3>
+                    <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{postResult.content}</p>
+                    <div className="mt-4 text-[#4ADE80] font-medium text-sm">
+                      #SDG{postResult.sdg_tag} #{getSDGName(postResult.sdg_tag).replace(/\s+/g, '')} #PulseImpact
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Column - AI Widgets */}
+                <div className="md:col-span-1 flex flex-col gap-4">
+                  <div className="border border-gray-200 rounded-xl p-6 bg-white flex flex-col justify-center min-h-[140px]">
+                    <span className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Most Likely</span>
+                    <h3 className="text-2xl font-extrabold text-[#4ADE80] leading-tight">
+                      SDG-{postResult.sdg_tag}<br/>{getSDGName(postResult.sdg_tag)}
+                    </h3>
+                  </div>
+
+                  <div className="border border-gray-200 rounded-xl p-6 bg-white flex flex-col items-center justify-center min-h-[220px]">
+                    <ScoreGauge score={postResult.impact_score} />
+                    <div className="mt-6 w-full text-center border-t border-gray-100 pt-4">
+                      <p className="text-xs text-gray-500 font-medium">Community Selected:</p>
+                      <p className="text-sm font-bold text-gray-700">{postResult.comm_id?.name || 'Global SDG Pool'}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+        </div>
+  );
+};
+
+export default CreatePost;
+
+================================================================================
+File: frontend\src\pages\EditProfile.jsx
+================================================================================
+
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import api from '../services/api';
+import { FiCamera, FiArrowLeft, FiSave } from 'react-icons/fi';
+
+const EditProfile = () => {
+  const { user, updateUser } = useAuth();
+  const navigate = useNavigate();
+  
+  const [formData, setFormData] = useState({
+    firstName: '', lastName: '', username: '', title: '', location: '', gender: '', birthday: '', phone: '', banner: '', avatar: ''
+  });
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        username: user.username || '',
+        title: user.title || '',
+        location: user.location || '',
+        gender: user.gender || '',
+        birthday: user.birthday || '',
+        phone: user.phone || '',
+        banner: user.banner || '',
+        avatar: user.avatar || ''
+      });
+    }
+  }, [user]);
+
+  const handleImageChange = (e, field) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({ ...formData, [field]: reader.result }); 
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      const res = await api.put('/users/profile', formData);
+      if (res.data.success) {
+        updateUser(res.data.data); 
+        navigate(`/profile/${user._id || user.id}`);
+      }
+    } catch (err) { 
+      alert("Failed to update profile. " + (err.response?.data?.message || err.message)); 
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="max-w-2xl mx-auto bg-white rounded-3xl p-8 shadow-sm">
+      <div className="flex items-center gap-4 mb-8">
+        <button type="button" onClick={() => navigate(-1)} className="p-2 hover:bg-gray-100 rounded-full transition"><FiArrowLeft className="text-xl"/></button>
+        <h2 className="text-2xl font-bold">Edit Profile</h2>
+      </div>
+
+      <form onSubmit={handleUpdate} className="space-y-6">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="relative group h-32 bg-gray-50 rounded-xl overflow-hidden border-2 border-dashed border-gray-300 flex flex-col items-center justify-center transition hover:border-green-400 cursor-pointer">
+            {formData.banner ? <img src={formData.banner} className="w-full h-full object-cover" alt="Banner preview" /> : <FiCamera className="text-gray-400 text-2xl" />}
+            <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleImageChange(e, 'banner')} />
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity pointer-events-none text-white text-[10px] font-bold tracking-wider">CHANGE BANNER</div>
+          </div>
+          <div className="relative group h-32 bg-gray-50 rounded-xl overflow-hidden border-2 border-dashed border-gray-300 flex flex-col items-center justify-center transition hover:border-green-400 cursor-pointer">
+            {formData.avatar ? <img src={formData.avatar} className="w-full h-full object-cover" alt="Avatar preview" /> : <FiCamera className="text-gray-400 text-2xl" />}
+            <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleImageChange(e, 'avatar')} />
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity pointer-events-none text-white text-[10px] font-bold tracking-wider">CHANGE AVATAR</div>
+          </div>
+        </div>
+
+        {/* Name Fields */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-bold text-gray-500 uppercase ml-1">First Name</label>
+            <input className="w-full p-3 bg-gray-50 rounded-xl border border-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400" value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} placeholder="First Name" />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-bold text-gray-500 uppercase ml-1">Last Name</label>
+            <input className="w-full p-3 bg-gray-50 rounded-xl border border-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400" value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} placeholder="Last Name" />
+          </div>
+        </div>
+
+        {/* Username and Title */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-bold text-gray-500 uppercase ml-1">Username</label>
+            <input className="w-full p-3 bg-gray-50 rounded-xl border border-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400" value={formData.username} onChange={(e) => setFormData({...formData, username: e.target.value})} required />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-bold text-gray-500 uppercase ml-1">Title</label>
+            <input className="w-full p-3 bg-gray-50 rounded-xl border border-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400" value={formData.title} placeholder="e.g. Environment Lover" onChange={(e) => setFormData({...formData, title: e.target.value})} />
+          </div>
+        </div>
+
+        {/* Gender and Birthday */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-bold text-gray-500 uppercase ml-1">Gender</label>
+            <select className="w-full p-3 bg-gray-50 rounded-xl border border-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400" value={formData.gender} onChange={(e) => setFormData({...formData, gender: e.target.value})}>
+              <option value="">Select Gender...</option>
+              <option value="Female">Female</option>
+              <option value="Male">Male</option>
+              <option value="Non-binary">Non-binary</option>
+              <option value="Prefer not to say">Prefer not to say</option>
+            </select>
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-bold text-gray-500 uppercase ml-1">Birthday</label>
+            <input type="date" className="w-full p-3 bg-gray-50 rounded-xl border border-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400" value={formData.birthday} onChange={(e) => setFormData({...formData, birthday: e.target.value})} />
+          </div>
+        </div>
+
+        {/* Location and Phone */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-bold text-gray-500 uppercase ml-1">Location</label>
+            <input className="w-full p-3 bg-gray-50 rounded-xl border border-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400" value={formData.location} placeholder="City, Country" onChange={(e) => setFormData({...formData, location: e.target.value})} />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-bold text-gray-500 uppercase ml-1">Phone Number</label>
+            <input type="tel" className="w-full p-3 bg-gray-50 rounded-xl border border-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400" value={formData.phone} placeholder="+1 234 567 8900" onChange={(e) => setFormData({...formData, phone: e.target.value})} />
+          </div>
+        </div>
+        
+        <button type="submit" disabled={isLoading} className="w-full py-4 mt-4 bg-[#4ADE80] text-white font-bold rounded-2xl shadow-lg shadow-green-100 flex items-center justify-center gap-2 hover:bg-green-500 transition disabled:opacity-70">
+          <FiSave /> {isLoading ? 'Saving Changes...' : 'Save All Changes'}
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default EditProfile;
+
+================================================================================
 File: frontend\src\pages\Home.jsx
 ================================================================================
 
-import { useAuth } from '../context/AuthContext';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../services/api";
+import PostCard from "../components/PostCard";
+import {
+  FiHome,
+  FiUser,
+  FiCompass,
+  FiSettings,
+  FiBell,
+  FiMessageSquare,
+  FiChevronDown,
+  FiPlus,
+  FiEdit3,
+} from "react-icons/fi";
 
 const Home = () => {
-  const { user, logout } = useAuth();
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await api.get("/posts");
+        if (response.data.success) {
+          setPosts(response.data.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch posts:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-md">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-primary">Pulse</h1>
-          <button onClick={logout} className="btn-secondary">
-            Logout
-          </button>
+    <div className="flex flex-col gap-6 w-full">
+      <div
+        onClick={() => navigate("/post")}
+        className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-6 flex items-center gap-4 cursor-pointer hover:shadow-md transition-all group"
+      >
+        <img
+          src="https://ui-avatars.com/api/?name=Pragya+Sekar"
+          alt="User"
+          className="w-10 h-10 rounded-full object-cover"
+        />
+        <div className="bg-gray-50 flex-1 rounded-xl px-4 py-3 text-sm text-gray-500 group-hover:bg-gray-100 transition">
+          Share your sustainable action with the world...
         </div>
-      </nav>
-      
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="card">
-          <h2 className="text-3xl font-bold mb-4">
-            Welcome, {user.username}! 🌱
-          </h2>
-          <div className="flex items-center space-x-4">
-            <div className="bg-primary text-white px-6 py-3 rounded-lg">
-              <p className="text-sm">Green Karma</p>
-              <p className="text-3xl font-bold">{user.green_karma}</p>
-            </div>
-            <div className="bg-secondary text-white px-6 py-3 rounded-lg">
-              <p className="text-sm">Role</p>
-              <p className="text-xl font-semibold capitalize">{user.role}</p>
-            </div>
-          </div>
+        <div className="bg-[#4ADE80] text-white p-3 rounded-xl shadow-sm shadow-green-200 group-hover:bg-green-500 transition">
+          <FiPlus className="text-xl" />
         </div>
       </div>
+
+      {loading ? (
+        <div className="text-center py-10 text-gray-500 font-semibold animate-pulse">
+          Loading Pulse Feed...
+        </div>
+      ) : posts.length === 0 ? (
+        <div className="text-center py-10 bg-white rounded-2xl shadow-sm border border-gray-100">
+          <p className="text-gray-500">
+            No sustainable actions posted yet. Be the first!
+          </p>
+        </div>
+      ) : (
+        posts.map((post) => <PostCard key={post._id} post={post} />)
+      )}
     </div>
   );
 };
@@ -8547,98 +10369,226 @@ export default Home;
 
 
 ================================================================================
+File: frontend\src\pages\Leaderboard.jsx
+================================================================================
+
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
+import { FiAward, FiTrendingUp, FiUser } from 'react-icons/fi';
+
+const Leaderboard = () => {
+  const [leaders, setLeaders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        const res = await api.get('/users/leaderboard');
+        if (res.data.success) setLeaders(res.data.data);
+      } catch (err) { console.error(err); }
+      finally { setLoading(false); }
+    };
+    fetchLeaderboard();
+  }, []);
+
+  return (
+    <div className="w-full max-w-[800px] mx-auto bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-gradient-to-r from-[#4ADE80] to-green-500 p-8 text-white text-center">
+        <FiAward className="text-5xl mx-auto mb-4" />
+        <h2 className="text-3xl font-black">Impact Leaderboard</h2>
+        <p className="opacity-90 font-medium mt-1">Celebrating our top green contributors</p>
+      </div>
+
+      <div className="p-6">
+        {loading ? (
+          <p className="text-center py-10 text-gray-400 animate-pulse">Ranking members...</p>
+        ) : (
+          <div className="flex flex-col gap-3">
+            {leaders.map((user, index) => (
+              <div 
+                key={user._id} 
+                onClick={() => navigate(`/profile/${user._id}`)}
+                className={`flex items-center justify-between p-4 rounded-2xl transition cursor-pointer border ${
+                  index === 0 ? 'bg-yellow-50 border-yellow-100' : 'hover:bg-gray-50 border-transparent'
+                }`}
+              >
+                <div className="flex items-center gap-4">
+                  <span className={`w-8 text-center font-black ${
+                    index === 0 ? 'text-yellow-500 text-xl' : index === 1 ? 'text-gray-400' : index === 2 ? 'text-orange-400' : 'text-gray-300'
+                  }`}>
+                    {index + 1}
+                  </span>
+                  <img 
+                    src={user.avatar?.startsWith('http') ? user.avatar : `https://ui-avatars.com/api/?name=${user.username}`} 
+                    className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm"
+                    alt="user"
+                  />
+                  <div>
+                    <h4 className="font-bold text-gray-800">
+                      {user.firstName ? `${user.firstName} ${user.lastName}` : user.username}
+                    </h4>
+                    <p className="text-xs text-gray-400 font-medium">@{user.username} • {user.title}</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-2 bg-green-50 text-[#4ADE80] px-4 py-2 rounded-xl border border-green-100">
+                  <FiTrendingUp />
+                  <span className="font-black text-sm">{user.green_karma} <span className="text-[10px] uppercase">Karma</span></span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Leaderboard;
+
+================================================================================
 File: frontend\src\pages\Login.jsx
 ================================================================================
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { login as loginService } from '../services/auth';
+// 1. Rename the API call so it doesn't conflict with the context function
+import { login as loginService } from '../services/auth'; 
+// 2. Import the AuthContext
 import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   
   const navigate = useNavigate();
-  const { login } = useAuth();
+  // 3. Pull the context login function to update global state
+  const { login: contextLogin } = useAuth(); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
+    setIsLoading(true);
 
     try {
+      // 4. Call the backend API
       const response = await loginService(email, password);
+      
       if (response.success) {
-        login(response.data.user, response.data.token);
+        // 5. CRITICAL FIX: Save the user to React state BEFORE navigating
+        contextLogin(response.data.user, response.data.token);
         navigate('/');
+      } else {
+        setError(response.message || 'Login failed. Please check your credentials.');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      // Added smart error handling here just like we did for Register
+      const errorMessage = err.response?.data?.message || 'An error occurred while logging in. Please try again.';
+      setError(errorMessage);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary to-secondary">
-      <div className="card max-w-md w-full mx-4">
-        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
-          Login to Pulse
-        </h2>
-        
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
-          </div>
-        )}
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-gray-700 font-medium mb-2">
-              Email
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="input-field"
-              placeholder="your@email.com"
-            />
+    <div className="min-h-screen flex items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl w-full flex flex-col lg:flex-row items-center lg:items-stretch shadow-2xl rounded-3xl overflow-hidden">
+        {/* Left Panel - Form */}
+        <div className="w-full lg:w-1/2 bg-white p-12 flex flex-col justify-center">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 mb-2">
+              Welcome Back!
+            </h2>
+            <p className="text-sm text-gray-500">
+              Enter your credentials to access your account
+            </p>
           </div>
           
-          <div>
-            <label className="block text-gray-700 font-medium mb-2">
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="input-field"
-              placeholder="••••••••"
-            />
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            {error && (
+              <div className="bg-red-50 border border-red-200 p-4 rounded-xl text-red-700 text-sm">
+                {error}
+              </div>
+            )}
+            
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="email-address" className="block text-sm font-medium text-gray-700 mb-2">
+                  Email address
+                </label>
+                <input
+                  id="email-address"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`w-full py-3 px-4 rounded-xl text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all ${
+                isLoading 
+                  ? 'bg-green-400 cursor-not-allowed' 
+                  : 'bg-green-500 hover:bg-green-600'
+              }`}
+            >
+              {isLoading ? 'Signing in...' : 'Log in'}
+            </button>
+          </form>
+
+          <div className="text-center mt-8 pt-8 border-t border-gray-200">
+            <p className="text-sm text-gray-600">
+              Don't have an account?{' '}
+              <Link to="/register" className="font-semibold text-green-600 hover:text-green-500">
+                Create account
+              </Link>
+            </p>
           </div>
-          
-          <button 
-            type="submit" 
-            disabled={loading}
-            className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
-        
-        <p className="mt-6 text-center text-gray-600">
-          Don't have an account?{' '}
-          <Link to="/register" className="text-primary font-semibold hover:underline">
-            Register
-          </Link>
-        </p>
+        </div>
+
+        {/* Right Panel - Image */}
+        <div 
+          className="w-full lg:w-1/2 bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-700 relative overflow-hidden lg:min-h-[488px]"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1519046904884-53103b34b206?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}
+        >
+          {/* Overlay for text readability */}
+          <div className="absolute inset-0 bg-black/20" />
+          <div className="absolute bottom-8 left-8 text-white">
+            <p className="text-lg font-semibold mb-1 opacity-90">Discover Beauty</p>
+            <p className="text-sm opacity-75">Nature awaits</p>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -8646,120 +10596,356 @@ const Login = () => {
 
 export default Login;
 
+================================================================================
+File: frontend\src\pages\Profile.jsx
+================================================================================
+
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import api from "../services/api";
+import PostCard from "../components/PostCard";
+import {
+  FiMail,
+  FiMapPin,
+  FiUser,
+  FiMessageSquare,
+  FiEdit2,
+  FiUserPlus
+} from "react-icons/fi";
+
+const Profile = () => {
+  const { user: authUser } = useAuth();
+  const navigate = useNavigate();
+  const { userId } = useParams();
+  
+  // 1. VARIABLE INITIALIZATION (Done first to avoid ReferenceErrors)
+  const cleanUserId = userId === "undefined" ? null : userId;
+  const authId = authUser?._id || authUser?.id;
+  const currentProfileId = cleanUserId || authId;
+  const isOwnProfile = authId === currentProfileId;
+
+  const [myPosts, setMyPosts] = useState([]);
+  const [profileUser, setProfileUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  // Determine displayUser BEFORE the effects run
+  const displayUser = profileUser || (isOwnProfile ? authUser : null);
+
+  // 2. DATA FETCHING EFFECT
+  useEffect(() => {
+    const fetchAllData = async () => {
+      if (!currentProfileId) return;
+      
+      setLoading(true);
+      try {
+        const userRes = await api.get(`/users/${currentProfileId}`);
+        if (userRes.data.success) {
+          setProfileUser(userRes.data.data);
+          
+          // Check if currently logged in user follows this profile
+          if (authUser) {
+            const myId = authUser._id || authUser.id;
+            setIsFollowing(userRes.data.data.followers?.includes(myId));
+          }
+        }
+
+        const postsRes = await api.get(`/posts?user=${currentProfileId}`);
+        if (postsRes.data.success) {
+          setMyPosts(postsRes.data.data);
+        }
+      } catch (err) {
+        console.error("Error fetching profile data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllData();
+  }, [currentProfileId, authId]);
+
+  // 3. FOLLOW HANDLER
+  const handleFollow = async () => {
+    try {
+      const res = await api.post(`/users/${currentProfileId}/follow`);
+      if (res.data.success) {
+        setIsFollowing(res.data.isFollowing);
+        
+        // Update local state so numbers change instantly
+        setProfileUser(prev => ({
+          ...prev,
+          followers: res.data.isFollowing 
+            ? [...(prev.followers || []), authId]
+            : (prev.followers || []).filter(id => id !== authId)
+        }));
+      }
+    } catch (err) {
+      console.error("Follow error", err);
+    }
+  };
+
+  const isValidImage = (str) => str?.startsWith('http') || str?.startsWith('data:');
+  const hasFullName = displayUser?.firstName || displayUser?.lastName;
+  const displayName = hasFullName 
+    ? `${displayUser.firstName || ''} ${displayUser.lastName || ''}`.trim() 
+    : displayUser?.username;
+
+  if (!displayUser && !loading) {
+    return <div className="text-center py-20 text-gray-500 font-medium">User not found.</div>;
+  }
+
+  return (
+    <div className="flex flex-col gap-6 w-full max-w-[800px] mx-auto">
+      
+      {/* HEADER CARD */}
+      <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100">
+        <div className="h-40 md:h-48 bg-gradient-to-r from-green-100 to-blue-100 relative">
+          {isValidImage(displayUser?.banner) && (
+            <img src={displayUser.banner} className="w-full h-full object-cover" alt="Banner" />
+          )}
+        </div>
+
+        <div className="px-6 md:px-8 pb-6 relative">
+          <div className="flex justify-between items-end -mt-16 mb-4 relative z-10">
+            <img
+              src={isValidImage(displayUser?.avatar) ? displayUser.avatar : `https://ui-avatars.com/api/?name=${displayUser?.username || 'User'}`}
+              className="w-32 h-32 rounded-full border-4 border-white shadow-md bg-white object-cover"
+              alt="Avatar"
+            />
+            
+            <div className="flex gap-2 mb-2">
+              <button className="p-2 bg-gray-100 rounded-full text-gray-600 hover:bg-gray-200 transition">
+                <FiMessageSquare />
+              </button>
+
+              {isOwnProfile ? (
+                <button
+                  onClick={() => navigate("/profile/edit")}
+                  className="px-6 py-2 bg-[#4ADE80] text-white font-bold rounded-xl flex items-center gap-2 hover:bg-green-500 transition shadow-sm"
+                >
+                  <FiEdit2 /> Edit Profile
+                </button>
+              ) : (
+                <button 
+                  onClick={handleFollow}
+                  className={`px-6 py-2 font-bold rounded-xl flex items-center gap-2 transition shadow-sm ${
+                    isFollowing ? 'bg-gray-200 text-gray-700 hover:bg-gray-300' : 'bg-gray-900 text-white hover:bg-gray-800'
+                  }`}
+                >
+                  {isFollowing ? 'Following' : <><FiUserPlus /> Follow</>}
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <h2 className="text-2xl font-black text-gray-900">{displayName || "Loading..."}</h2>
+            <p className="text-gray-500 text-sm font-medium mt-1">
+              <span className="text-gray-400">@{displayUser?.username}</span> • {displayUser?.title || "Member"}
+            </p>
+            
+            <div className="flex flex-wrap items-center gap-6 mt-4">
+              <div className="text-sm font-bold text-gray-800 cursor-pointer hover:underline">
+                {displayUser?.following?.length || 0} <span className="text-gray-400 font-medium">Following</span>
+              </div>
+              <div className="text-sm font-bold text-gray-800 cursor-pointer hover:underline">
+                {displayUser?.followers?.length || 0} <span className="text-gray-400 font-medium">Followers</span>
+              </div>
+              <div className="bg-green-50 text-[#4ADE80] text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider flex items-center gap-1 border border-green-100">
+                🌿 {displayUser?.green_karma || 0} Karma
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ABOUT SECTION */}
+        <div className="px-8 py-4 bg-gray-50 border-t border-gray-100 flex flex-wrap gap-6">
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <FiUser className="text-[#4ADE80]" /> {displayUser?.gender || "Not specified"}
+          </div>
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <FiMapPin className="text-[#4ADE80]" /> {displayUser?.location || "Global"}
+          </div>
+          {displayUser?.email && (
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <FiMail className="text-[#4ADE80]" /> {displayUser.email}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* POSTS LIST */}
+      <div className="flex flex-col gap-4">
+        <div className="flex gap-8 px-4 border-b border-gray-200 font-bold text-sm">
+          <button className="pb-2 border-b-2 border-[#4ADE80] text-[#4ADE80]">Posts</button>
+          <button className="pb-2 text-gray-400 hover:text-gray-600 transition">History</button>
+        </div>
+        
+        {loading ? (
+          <p className="text-center py-10 text-gray-400 animate-pulse font-medium">Loading impact...</p>
+        ) : myPosts.length > 0 ? (
+          myPosts.map((post) => <PostCard key={post._id} post={post} />)
+        ) : (
+          <div className="bg-white p-10 rounded-3xl text-center border-2 border-dashed border-gray-100 mt-4">
+            <p className="text-gray-400 font-medium">No posts yet. Start sharing!</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Profile;
 
 ================================================================================
 File: frontend\src\pages\Register.jsx
 ================================================================================
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { register as registerService } from '../services/auth';
-import { useAuth } from '../context/AuthContext';
+import { register } from '../services/auth'; // Ensure this matches your auth.js exports
 
 const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
+    setIsLoading(true);
 
     try {
-      const response = await registerService(username, email, password);
+      const response = await register(username, email, password);
+      
       if (response.success) {
-        login(response.data.user, response.data.token);
-        navigate('/');
+        navigate('/login'); 
+      } else {
+        // FIXED: Make sure we render the exact validation message from the backend
+        setError(response.message || 'Registration failed. Please check your inputs.');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
+      // FIXED: If Axios throws an error, try to extract the backend's specific message
+      const errorMessage = err.response?.data?.message || 'An error occurred while registering. Please try again.';
+      setError(errorMessage);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary to-secondary">
-      <div className="card max-w-md w-full mx-4">
-        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
-          Join Pulse
-        </h2>
-        
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
-          </div>
-        )}
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-gray-700 font-medium mb-2">
-              Username
-            </label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              minLength="3"
-              className="input-field"
-              placeholder="johndoe"
-            />
-          </div>
-          
-          <div>
-            <label className="block text-gray-700 font-medium mb-2">
-              Email
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="input-field"
-              placeholder="your@email.com"
-            />
-          </div>
-          
-          <div>
-            <label className="block text-gray-700 font-medium mb-2">
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength="6"
-              className="input-field"
-              placeholder="••••••••"
-            />
-            <p className="text-sm text-gray-500 mt-1">
-              Must include uppercase, lowercase, and number
+    <div className="min-h-screen flex items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl w-full flex flex-col lg:flex-row items-center lg:items-stretch shadow-2xl rounded-3xl overflow-hidden">
+        {/* Left Panel - Form */}
+        <div className="w-full lg:w-1/2 bg-white p-12 flex flex-col justify-center">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 mb-2">
+              Join Pulse!
+            </h2>
+            <p className="text-sm text-gray-500">
+              Create an account to start tracking your sustainable actions
             </p>
           </div>
           
-          <button 
-            type="submit" 
-            disabled={loading}
-            className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? 'Registering...' : 'Register'}
-          </button>
-        </form>
-        
-        <p className="mt-6 text-center text-gray-600">
-          Already have an account?{' '}
-          <Link to="/login" className="text-primary font-semibold hover:underline">
-            Login
-          </Link>
-        </p>
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            {error && (
+              <div className="bg-red-50 border border-red-200 p-4 rounded-xl text-red-700 text-sm">
+                {error}
+              </div>
+            )}
+            
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
+                  Username
+                </label>
+                <input
+                  id="username"
+                  name="username"
+                  type="text"
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  placeholder="Choose a username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="email-address" className="block text-sm font-medium text-gray-700 mb-2">
+                  Email address
+                </label>
+                <input
+                  id="email-address"
+                  name="email"
+                  type="email"
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  placeholder="Create a password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`w-full py-3 px-4 rounded-xl text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all ${
+                isLoading 
+                  ? 'bg-green-400 cursor-not-allowed' 
+                  : 'bg-green-500 hover:bg-green-600'
+              }`}
+            >
+              {isLoading ? 'Creating account...' : 'Sign up'}
+            </button>
+          </form>
+
+          <div className="text-center mt-8 pt-8 border-t border-gray-200">
+            <p className="text-sm text-gray-600">
+              Already have an account?{' '}
+              <Link to="/login" className="font-semibold text-green-600 hover:text-green-500">
+                Log in
+              </Link>
+            </p>
+          </div>
+        </div>
+
+        {/* Right Panel - Image */}
+        <div 
+          className="w-full lg:w-1/2 bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-700 relative overflow-hidden lg:min-h-[488px]"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1519046904884-53103b34b206?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}
+        >
+          {/* Overlay for text readability */}
+          <div className="absolute inset-0 bg-black/20" />
+          {/* Optional decorative elements */}
+          <div className="absolute bottom-8 left-8 text-white">
+            <p className="text-lg font-semibold mb-1 opacity-90">Discover Beauty</p>
+            <p className="text-sm opacity-75">Nature awaits</p>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -8767,6 +10953,120 @@ const Register = () => {
 
 export default Register;
 
+================================================================================
+File: frontend\src\pages\Settings.jsx
+================================================================================
+
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import api from '../services/api';
+import { FiLock, FiTrash2, FiShield, FiCheckCircle } from 'react-icons/fi';
+
+const Settings = () => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('password');
+  const [passwords, setPasswords] = useState({ current: '', new: '' });
+  const [status, setStatus] = useState({ msg: '', type: '' });
+
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await api.put('/users/change-password', {
+        currentPassword: passwords.current,
+        newPassword: passwords.new
+      });
+      if (res.data.success) {
+        setStatus({ msg: 'Password changed successfully!', type: 'success' });
+        setPasswords({ current: '', new: '' });
+      }
+    } catch (err) {
+      setStatus({ msg: err.response?.data?.message || 'Error updating password', type: 'error' });
+    }
+  };
+
+  const handleModRequest = async () => {
+    try {
+      const res = await api.post('/users/request-mod');
+      if (res.data.success) setStatus({ msg: 'Moderator request sent!', type: 'success' });
+    } catch (err) { setStatus({ msg: 'Failed to send request', type: 'error' }); }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (window.confirm("WARNING: This will permanently delete your account and all your posts. Proceed?")) {
+      try {
+        const res = await api.delete('/users/delete-account');
+        if (res.data.success) {
+          logout();
+          navigate('/register');
+        }
+      } catch (err) { alert("Delete failed"); }
+    }
+  };
+
+  return (
+    <div className="w-full max-w-[700px] mx-auto flex flex-col gap-6 p-4">
+      <h2 className="text-3xl font-black text-gray-900">Settings</h2>
+
+      {status.msg && (
+        <div className={`p-4 rounded-2xl border font-bold text-sm flex items-center gap-2 ${
+          status.type === 'success' ? 'bg-green-50 border-green-100 text-green-600' : 'bg-red-50 border-red-100 text-red-600'
+        }`}>
+          {status.type === 'success' && <FiCheckCircle />} {status.msg}
+        </div>
+      )}
+
+      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden flex flex-col md:flex-row min-h-[450px]">
+        {/* Navigation Sidebar */}
+        <div className="w-full md:w-1/3 bg-gray-50 p-4 border-r border-gray-100 flex flex-col gap-2">
+          <button onClick={() => setActiveTab('password')} className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition ${activeTab === 'password' ? 'bg-white text-[#4ADE80] shadow-sm' : 'text-gray-500'}`}>
+            <FiLock /> Security
+          </button>
+          <button onClick={() => setActiveTab('moderator')} className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition ${activeTab === 'moderator' ? 'bg-white text-[#4ADE80] shadow-sm' : 'text-gray-500'}`}>
+            <FiShield /> Community
+          </button>
+          <button onClick={() => setActiveTab('danger')} className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition ${activeTab === 'danger' ? 'bg-white text-red-500 shadow-sm' : 'text-gray-500'}`}>
+            <FiTrash2 /> Danger Zone
+          </button>
+        </div>
+
+        {/* Content Area */}
+        <div className="flex-1 p-8">
+          {activeTab === 'password' && (
+            <form onSubmit={handlePasswordChange} className="space-y-6">
+              <h3 className="font-bold text-gray-800">Change Password</h3>
+              <input type="password" placeholder="Current Password" required className="w-full p-3 bg-gray-50 rounded-xl border border-gray-100 focus:ring-2 focus:ring-green-400 outline-none" value={passwords.current} onChange={(e) => setPasswords({...passwords, current: e.target.value})} />
+              <input type="password" placeholder="New Password" required className="w-full p-3 bg-gray-50 rounded-xl border border-gray-100 focus:ring-2 focus:ring-green-400 outline-none" value={passwords.new} onChange={(e) => setPasswords({...passwords, new: e.target.value})} />
+              <button type="submit" className="w-full py-3 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition">Update Password</button>
+            </form>
+          )}
+
+          {activeTab === 'moderator' && (
+            <div className="text-center space-y-6 py-8">
+              <FiShield className="text-5xl text-blue-400 mx-auto" />
+              <div>
+                <h3 className="font-bold text-gray-800 text-lg">Become a Moderator</h3>
+                <p className="text-sm text-gray-400 mt-2 leading-relaxed">Help us verify sustainability impacts and keep the Pulse community safe and clean.</p>
+              </div>
+              <button onClick={handleModRequest} className="px-8 py-3 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-600 transition shadow-lg shadow-blue-100">Submit Application</button>
+            </div>
+          )}
+
+          {activeTab === 'danger' && (
+            <div className="space-y-6">
+              <h3 className="font-bold text-red-500">Delete Account</h3>
+              <p className="text-sm text-gray-500 leading-relaxed">Once you delete your account, there is no going back. All your karma, posts, and history will be wiped from our servers.</p>
+              <button onClick={handleDeleteAccount} className="w-full py-3 border-2 border-red-500 text-red-500 font-bold rounded-xl hover:bg-red-50 transition">Delete My Account Permanently</button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Settings;
 
 ================================================================================
 File: frontend\src\services\api.js

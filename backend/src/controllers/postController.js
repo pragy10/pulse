@@ -10,99 +10,73 @@ import { getImageUrl } from '../services/uploadService.js';
 // @access  Private
 export const createPost = async (req, res) => {
   try {
-    const { title, content, comm_id } = req.body;
+    const { title, content } = req.body;
     const userId = req.user._id;
 
-    // Validate input
-    if (!title || !content || !comm_id) {
+    if (!title || !content) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide title, content, and community'
+        message: 'Please provide title and content'
       });
     }
 
-    // Check if community exists
-    const community = await Community.findById(comm_id);
-    if (!community) {
-      return res.status(404).json({
-        success: false,
-        message: 'Community not found'
-      });
-    }
-
-    // Handle image upload
     let imageUrl = '';
     if (req.file) {
-      imageUrl = getImageUrl(req.file.filename);
+      imageUrl = getImageUrl(req.file); // Returns a Base64 string
     }
 
-    // Create post with pending status
+    // 🛑 1. THE WAITING PHASE: Node.js stops here and waits for Python!
+    const classification = await classifyPost(title, content, imageUrl);
+    
+    // Set fallback values just in case the AI is down
+    let sdg_tag = 13; 
+    let impactScore = 10;
+    let confidence = 0;
+
+    // If Python succeeded, grab the real scores
+    if (classification.success && classification.sdg_tag) {
+      sdg_tag = classification.sdg_tag;
+      confidence = classification.confidence;
+      impactScore = calculateImpactScore(classification.sdg_tag, classification.confidence, 0);
+    }
+
+    // 🔍 2. THE ROUTING PHASE: Find the matching community
+    const community = await Community.findOne({ sdg_number: sdg_tag });
+    if (!community) {
+      return res.status(500).json({ success: false, message: 'System error: SDG Community not found' });
+    }
+
+    // 💾 3. THE SAVING PHASE: Save to the database
     const post = await Post.create({
       user_id: userId,
-      comm_id,
+      comm_id: community._id, 
       title,
       content,
       image_url: imageUrl,
-      status: 'pending'
+      sdg_tag: sdg_tag,
+      impact_score: impactScore,
+      classification_confidence: confidence,
+      status: 'published' // It skips 'pending' entirely now!
     });
 
-    // Call AI service for classification (async, don't wait)
-    classifyPost(title, content, imageUrl)
-      .then(async (classification) => {
-        if (classification.success && classification.sdg_tag) {
-          const impactScore = calculateImpactScore(
-            classification.sdg_tag,
-            classification.confidence
-          );
+    // Update karma and counts
+    await updateUserKarma(userId, impactScore);
+    await Community.findByIdAndUpdate(community._id, { $inc: { post_count: 1 } });
 
-          // Update post with AI results
-          post.sdg_tag = classification.sdg_tag;
-          post.impact_score = impactScore;
-          post.classification_confidence = classification.confidence;
-          post.status = 'published';
-          await post.save();
+    // Populate user and community data for the React frontend
+    await post.populate('user_id', 'username avatar green_karma');
+    await post.populate('comm_id', 'name sdg_number');
 
-          // Update user's karma
-          await updateUserKarma(userId, impactScore);
-
-          // Update community post count
-          await Community.findByIdAndUpdate(comm_id, {
-            $inc: { post_count: 1 }
-          });
-        } else {
-          // If AI fails, mark as published with default values
-          post.status = 'published';
-          post.sdg_tag = community.sdg_number; // Use community's SDG
-          post.impact_score = 10; // Default score
-          await post.save();
-          
-          await updateUserKarma(userId, 10);
-          await Community.findByIdAndUpdate(comm_id, {
-            $inc: { post_count: 1 }
-          });
-        }
-      })
-      .catch(async (error) => {
-        console.error('Classification error:', error);
-        // Fallback: publish with default values
-        post.status = 'published';
-        post.sdg_tag = community.sdg_number;
-        post.impact_score = 10;
-        await post.save();
-      });
-
+    // 🚀 4. THE RESPONSE PHASE: Tell React we are done!
     res.status(201).json({
       success: true,
-      message: 'Post created successfully. Classification in progress...',
+      message: 'Post classified and created successfully!',
       data: post
     });
+
   } catch (error) {
     console.error('Create post error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Error creating post',
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined
-    });
+    res.status(500).json({ success: false, message: 'Error creating post' });
   }
 };
 
@@ -111,12 +85,16 @@ export const createPost = async (req, res) => {
 // @access  Public
 export const getPosts = async (req, res) => {
   try {
-    const { comm_id, sdg_tag, sort = 'new', page = 1, limit = 20 } = req.query;
+    // FIXED: Added 'user' to the destructured query variables
+    const { comm_id, sdg_tag, user, sort = 'new', page = 1, limit = 20 } = req.query;
 
     // Build query
     const query = { status: 'published' };
     if (comm_id) query.comm_id = comm_id;
     if (sdg_tag) query.sdg_tag = parseInt(sdg_tag);
+    
+    // FIXED: If the frontend sends ?user=ID, add it to the database search query
+    if (user) query.user_id = user;
 
     // Sorting options
     let sortOption = {};
@@ -195,51 +173,70 @@ export const getPostById = async (req, res) => {
   }
 };
 
+export const updatePost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    if (!post) {
+      return res.status(404).json({ success: false, message: 'Post not found' });
+    }
+
+    // Check authorization: Only the owner can edit
+    if (post.user_id.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ success: false, message: 'Not authorized to edit this post' });
+    }
+
+    // Update the fields
+    post.title = req.body.title || post.title;
+    post.content = req.body.content || post.content;
+    
+    await post.save();
+
+    res.status(200).json({ success: true, data: post });
+  } catch (error) {
+    console.error('Update post error:', error);
+    res.status(500).json({ success: false, message: 'Error updating post' });
+  }
+};
+
 // @desc    Delete post
 // @route   DELETE /api/posts/:id
 // @access  Private (Owner, Moderator, Admin)
 export const deletePost = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(req.params.id).populate('comm_id');
+    if (!post) return res.status(404).json({ success: false, message: 'Post not found' });
 
-    if (!post) {
-      return res.status(404).json({
-        success: false,
-        message: 'Post not found'
-      });
-    }
-
-    // Check authorization
     const isOwner = post.user_id.toString() === req.user._id.toString();
-    const isAdmin = req.user.role === 'admin';
-    const isModerator = req.user.role === 'moderator';
+    const isGlobalAdmin = req.user.role === 'admin';
+    // NEW: Check if user is a moderator of THIS specific community
+    const isCommunityMod = post.comm_id.moderators.includes(req.user._id);
 
-    if (!isOwner && !isAdmin && !isModerator) {
-      return res.status(403).json({
-        success: false,
-        message: 'Not authorized to delete this post'
-      });
+    if (!isOwner && !isGlobalAdmin && !isCommunityMod) {
+      return res.status(403).json({ success: false, message: 'Not authorized' });
     }
 
-    // Soft delete
     post.status = 'removed';
     await post.save();
-
-    // Decrement community post count
-    await Community.findByIdAndUpdate(post.comm_id, {
-      $inc: { post_count: -1 }
-    });
-
-    res.status(200).json({
-      success: true,
-      message: 'Post deleted successfully'
-    });
+    res.status(200).json({ success: true, message: 'Post removed' });
   } catch (error) {
-    console.error('Delete post error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Error deleting post',
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined
-    });
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const pinPost = async (req, res) => {
+  try {
+    if (req.user.role !== 'moderator' && req.user.role !== 'admin') {
+      return res.status(403).json({ success: false, message: 'Only moderators can pin posts' });
+    }
+
+    const post = await Post.findById(req.params.id);
+    // Toggle the pin status (you'll need to add 'isPinned' to your Post.js model)
+    post.isPinned = !post.isPinned;
+    await post.save();
+
+    res.status(200).json({ success: true, data: post });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };

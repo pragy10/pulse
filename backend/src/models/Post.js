@@ -60,7 +60,11 @@ const postSchema = new mongoose.Schema({
   created_at: {
     type: Date,
     default: Date.now
-  }
+  },
+  isPinned: { 
+    type: Boolean, 
+    default: false 
+  },
 }, {
   timestamps: true
 });

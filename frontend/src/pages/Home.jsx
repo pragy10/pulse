@@ -1,36 +1,73 @@
-import { useAuth } from '../context/AuthContext';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../services/api";
+import PostCard from "../components/PostCard";
+import {
+  FiHome,
+  FiUser,
+  FiCompass,
+  FiSettings,
+  FiBell,
+  FiMessageSquare,
+  FiChevronDown,
+  FiPlus,
+  FiEdit3,
+} from "react-icons/fi";
 
 const Home = () => {
-  const { user, logout } = useAuth();
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await api.get("/posts");
+        if (response.data.success) {
+          setPosts(response.data.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch posts:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-md">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-primary">Pulse</h1>
-          <button onClick={logout} className="btn-secondary">
-            Logout
-          </button>
+    <div className="flex flex-col gap-6 w-full">
+      <div
+        onClick={() => navigate("/post")}
+        className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-6 flex items-center gap-4 cursor-pointer hover:shadow-md transition-all group"
+      >
+        <img
+          src="https://ui-avatars.com/api/?name=Pragya+Sekar"
+          alt="User"
+          className="w-10 h-10 rounded-full object-cover"
+        />
+        <div className="bg-gray-50 flex-1 rounded-xl px-4 py-3 text-sm text-gray-500 group-hover:bg-gray-100 transition">
+          Share your sustainable action with the world...
         </div>
-      </nav>
-      
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="card">
-          <h2 className="text-3xl font-bold mb-4">
-            Welcome, {user.username}! 🌱
-          </h2>
-          <div className="flex items-center space-x-4">
-            <div className="bg-primary text-white px-6 py-3 rounded-lg">
-              <p className="text-sm">Green Karma</p>
-              <p className="text-3xl font-bold">{user.green_karma}</p>
-            </div>
-            <div className="bg-secondary text-white px-6 py-3 rounded-lg">
-              <p className="text-sm">Role</p>
-              <p className="text-xl font-semibold capitalize">{user.role}</p>
-            </div>
-          </div>
+        <div className="bg-[#4ADE80] text-white p-3 rounded-xl shadow-sm shadow-green-200 group-hover:bg-green-500 transition">
+          <FiPlus className="text-xl" />
         </div>
       </div>
+
+      {loading ? (
+        <div className="text-center py-10 text-gray-500 font-semibold animate-pulse">
+          Loading Pulse Feed...
+        </div>
+      ) : posts.length === 0 ? (
+        <div className="text-center py-10 bg-white rounded-2xl shadow-sm border border-gray-100">
+          <p className="text-gray-500">
+            No sustainable actions posted yet. Be the first!
+          </p>
+        </div>
+      ) : (
+        posts.map((post) => <PostCard key={post._id} post={post} />)
+      )}
     </div>
   );
 };

@@ -29,7 +29,11 @@ const communitySchema = new mongoose.Schema({
   created_at: {
     type: Date,
     default: Date.now
-  }
+  },
+  moderators: [{ 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User' 
+  }],
 }, {
   timestamps: true
 });

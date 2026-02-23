@@ -19,10 +19,7 @@ class ClassificationResponse(BaseModel):
 @router.post("/classify", response_model=ClassificationResponse)
 async def classify_post(request: ClassificationRequest):
     try:
-        # Classify the post into SDG
         sdg_tag, confidence = classify_sdg(request.title, request.content)
-        
-        # Calculate impact score
         impact_score = calculate_impact_score(sdg_tag, confidence)
         
         return ClassificationResponse(
