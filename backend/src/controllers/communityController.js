@@ -211,3 +211,32 @@ export const getMyMemberships = async (req, res) => {
     });
   }
 };
+
+
+// @desc    Get communities moderated by the current user
+// @route   GET /api/communities/moderating
+// @access  Private (Moderator/Admin)
+export const getModeratedCommunities = async (req, res) => {
+  try {
+    // Find communities where the user's ID is inside the moderators array
+    const communities = await Community.find({ moderators: req.user._id });
+    res.status(200).json({ success: true, data: communities });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Get single community by ID
+// @route   GET /api/communities/:id
+// @access  Public
+export const getCommunityById = async (req, res) => {
+  try {
+    const community = await Community.findById(req.params.id);
+    if (!community) {
+      return res.status(404).json({ success: false, message: 'Community not found' });
+    }
+    res.status(200).json({ success: true, data: community });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

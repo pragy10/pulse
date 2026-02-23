@@ -1,18 +1,39 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  FiHome,
-  FiUser,
-  FiCompass,
-  FiSettings,
-  FiBell,
-  FiMessageSquare,
-  FiChevronDown,
-  FiPlus,
-} from "react-icons/fi";
+import api from "../services/api";
 
 const BrowseCommunities = () => {
   const navigate = useNavigate();
+  const [dbCommunities, setDbCommunities] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch the real MongoDB communities so we can get their actual _ids
+  useEffect(() => {
+    const fetchCommunities = async () => {
+      try {
+        const res = await api.get('/communities');
+        if (res.data.success) {
+          setDbCommunities(res.data.data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch communities", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchCommunities();
+  }, []);
+
+  // Match the hardcoded SDG number to the real database _id before navigating
+  const handleCommunityClick = (sdgNumber) => {
+    const targetCommunity = dbCommunities.find(c => c.sdg_number === sdgNumber);
+    
+    if (targetCommunity) {
+      navigate(`/community/${targetCommunity._id}`);
+    } else {
+      alert("This community hasn't been initialized in the database yet!");
+    }
+  };
 
   // SDG Data Mapping: Colors, Titles, and Numbers
   const sdgGoals = [
@@ -41,30 +62,35 @@ const BrowseCommunities = () => {
         Browse Communities
       </h2>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {sdgGoals.map((goal) => (
-          <div
-            key={goal.id}
-            onClick={() => navigate(`/community/${goal.id}`)}
-            className={`${goal.color} aspect-square rounded-lg p-4 flex flex-col justify-between cursor-pointer hover:scale-[1.03] hover:brightness-110 transition-all shadow-md group`}
-          >
-            <div className="flex justify-between items-start text-white">
-              <span className="text-3xl font-black opacity-90">{goal.id}</span>
-              <span className="text-[10px] font-bold uppercase text-right leading-tight max-w-[60%]">
-                {goal.title}
-              </span>
-            </div>
-            {/* Simplified Icon Placeholder - Replaces icons with Goal Number for clean look */}
-            <div className="flex justify-center items-center flex-1">
-              <div className="w-16 h-16 border-4 border-white/20 rounded-full flex items-center justify-center">
-                <span className="text-white text-xs font-bold opacity-40">
-                  SDG {goal.id}
+      {isLoading ? (
+        <div className="text-center py-20 text-gray-400 font-medium animate-pulse">
+          Loading communities...
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {sdgGoals.map((goal) => (
+            <div
+              key={goal.id}
+              onClick={() => handleCommunityClick(goal.id)}
+              className={`${goal.color} aspect-square rounded-lg p-4 flex flex-col justify-between cursor-pointer hover:scale-[1.03] hover:brightness-110 transition-all shadow-md group`}
+            >
+              <div className="flex justify-between items-start text-white">
+                <span className="text-3xl font-black opacity-90">{goal.id}</span>
+                <span className="text-[10px] font-bold uppercase text-right leading-tight max-w-[60%]">
+                  {goal.title}
                 </span>
               </div>
+              <div className="flex justify-center items-center flex-1">
+                <div className="w-16 h-16 border-4 border-white/20 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs font-bold opacity-40">
+                    SDG {goal.id}
+                  </span>
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

@@ -5,13 +5,17 @@ import {
   initializeCommunities,
   joinCommunity,
   leaveCommunity,
-  getMyMemberships
+  getMyMemberships,
+  getModeratedCommunities,
+  getCommunityById
 } from '../controllers/communityController.js';
 import { protect, authorize } from '../middleware/auth.js';
 
 const router = express.Router();
 
 // Public routes
+router.get('/moderating', protect, getModeratedCommunities);
+router.get('/:id', getCommunityById);
 router.get('/', getCommunities);
 router.get('/:id', getCommunity);
 

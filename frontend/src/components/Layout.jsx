@@ -4,15 +4,38 @@ import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import { 
   FiHome, FiUser, FiCompass, FiSettings, 
-  FiBell, FiMessageSquare, FiChevronDown, FiPlus, FiEdit3, FiAward
+  FiBell, FiMessageSquare, FiChevronDown, FiPlus, FiEdit3, FiAward, FiShield, FiSliders 
 } from 'react-icons/fi';
 
 const Layout = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, logout } = useAuth(); // Brought in logout here
+  const { user, logout } = useAuth();
   const [suggestedUsers, setSuggestedUsers] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(true);
+  const [isCommunityMod, setIsCommunityMod] = useState(false);
+
+  useEffect(() => {
+    const checkModStatus = async () => {
+      // If they are already a global admin or global mod, show it instantly
+      if (user?.role === 'admin' || user?.role === 'moderator') {
+        setIsCommunityMod(true);
+        return;
+      }
+      // Otherwise, ask the database if they moderate any communities
+      if (user) {
+        try {
+          const res = await api.get('/communities/moderating');
+          if (res.data.success && res.data.data.length > 0) {
+            setIsCommunityMod(true);
+          }
+        } catch (err) {
+          console.error("Failed to check mod status", err);
+        }
+      }
+    };
+    checkModStatus();
+  }, [user]);
 
   // Fetch dynamic right sidebar data
   useEffect(() => {
@@ -45,7 +68,7 @@ const Layout = ({ children }) => {
     },
     { name: 'Explore Communities', path: '/explore', match: '/explore', icon: <FiCompass />},
     { name: 'Leaderboard', path: '/leaderboard', match: '/leaderboard', icon: <FiAward /> },
-    { name: 'Settings', path: '/settings', match: '/settings', icon: <FiSettings /> },
+    { name: 'Settings', path: '/settings', match: '/settings', icon: <FiSettings /> }
   ];
 
   // Helper to safely render avatars
@@ -97,6 +120,7 @@ const Layout = ({ children }) => {
           </div>
 
           <nav className="flex flex-col gap-2 mb-8 px-2">
+            {/* Map standard nav items */}
             {navItems.map((item) => {
               const isActive = item.match === '/' 
                 ? location.pathname === '/' 
@@ -116,6 +140,36 @@ const Layout = ({ children }) => {
                 </button>
               );
             })}
+
+            {/* MODERATION & ADMIN PANELS */}
+            {/* 3. CHANGE THIS LINE: */}
+            {(isCommunityMod || user?.role === 'admin') && (
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <p className="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Management</p>
+                
+                {/* Mod Panel (For Mods and Admins) */}
+                <button
+                  onClick={() => navigate('/mod-panel')}
+                  className={`flex items-center gap-4 px-4 py-3 rounded-lg transition text-left w-full font-semibold ${
+                    location.pathname === '/mod-panel' ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-100'
+                  }`}
+                >
+                  <span className="text-xl"><FiShield /></span> Mod Panel
+                </button>
+
+                {/* Admin Panel (Strictly for Admins) */}
+                {user?.role === 'admin' && (
+                  <button
+                    onClick={() => navigate('/admin')}
+                    className={`flex items-center gap-4 px-4 py-3 rounded-lg transition text-left w-full font-semibold mt-2 ${
+                      location.pathname === '/admin' ? 'bg-purple-50 text-purple-600' : 'text-gray-600 hover:bg-gray-100'
+                    }`}
+                  >
+                    <span className="text-xl"><FiSliders /></span> Admin Panel
+                  </button>
+                )}
+              </div>
+            )}
           </nav>
 
           <div className="px-4">

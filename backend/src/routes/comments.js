@@ -7,6 +7,7 @@ const router = express.Router();
 // Comment routes (nested under posts)
 router.post('/:postId/comments', protect, addComment);
 router.get('/:postId/comments', getComments);
-router.delete('/comments/:id', protect, deleteComment);
+router.delete('/comment/:id', protect, deleteComment);
+router.delete('/:id', protect, deleteComment);
 
 export default router;

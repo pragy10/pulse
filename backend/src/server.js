@@ -14,6 +14,7 @@ import postRoutes from './routes/posts.js';
 import communityRoutes from './routes/communities.js';
 import commentRoutes from './routes/comments.js';
 import userRoutes from './routes/users.js';
+import adminRoutes from './routes/admin.js';
 
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -58,6 +59,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/posts', commentRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/communities', communityRoutes);
 app.use('/api/users', userRoutes);
 

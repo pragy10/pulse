@@ -135,17 +135,31 @@ export const getComments = async (req, res) => {
 export const deleteComment = async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.id);
-    
+
+    if (!comment) {
+      return res.status(404).json({ success: false, message: 'Comment not found' });
+    }
+
+    // AUTH CHECK: Is the user the owner OR a moderator/admin?
     const isOwner = comment.user_id.toString() === req.user._id.toString();
     const isModerator = req.user.role === 'moderator' || req.user.role === 'admin';
 
     if (!isOwner && !isModerator) {
-      return res.status(403).json({ success: false, message: 'Not authorized' });
+      return res.status(403).json({ success: false, message: 'Not authorized to delete this comment' });
     }
 
+    // Save the post ID before deleting the comment so we can update the count
+    const postId = comment.post_id;
+
+    // Delete the comment
     await Comment.findByIdAndDelete(req.params.id);
-    res.status(200).json({ success: true, message: 'Comment deleted' });
+
+    // Decrement the comment count on the parent post
+    await Post.findByIdAndUpdate(postId, { $inc: { comment_count: -1 } });
+
+    res.status(200).json({ success: true, message: 'Comment deleted successfully' });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error('Delete comment error:', error);
+    res.status(500).json({ success: false, message: 'Error deleting comment' });
   }
 };

@@ -12,6 +12,9 @@ import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
 import Leaderboard from "./pages/Leaderboard";
 import Settings from "./pages/Settings";
+import ModPanel from "./pages/ModPanel";
+import AdminPanel from "./pages/AdminPanel";
+
 
 // 1. We create a wrapper that tells React Router where to put the page content inside your Layout
 const LayoutWrapper = () => {
@@ -43,10 +46,12 @@ function App() {
             <Route path="/community/:id" element={<ProtectedRoute><CommunityView /></ProtectedRoute>} />
             <Route path="/post" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
             <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
             
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/profile/edit" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
             <Route path="/profile/:userId" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/mod-panel" element={<ProtectedRoute><ModPanel /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
           </Route>
 

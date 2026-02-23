@@ -7,11 +7,11 @@ import {
   FiMoreVertical, FiEdit2, FiTrash2, FiMapPin 
 } from 'react-icons/fi';
 
-// Updated ThreadedComment to support moderator deletion
+// ThreadedComment
 const ThreadedComment = ({ comment, depth = 0, onReply, onDelete, currentUser }) => {
   const isCommentOwner = currentUser?._id === comment.user_id?._id || currentUser?.id === comment.user_id?._id;
-  const isModerator = currentUser?.role === 'moderator' || currentUser?.role === 'admin';
-
+  const isGlobalMod = currentUser?.role === 'admin'; // We rely on global admin or owner for comments here easily
+  
   return (
     <div className={`relative ${depth > 0 ? 'ml-10 mt-3' : 'mt-4'}`}>
       {depth > 0 && <div className="absolute -top-10 -left-6 w-5 h-14 border-l-2 border-b-2 border-gray-100 rounded-bl-xl pointer-events-none" />}
@@ -22,8 +22,7 @@ const ThreadedComment = ({ comment, depth = 0, onReply, onDelete, currentUser })
             <span className="font-bold text-[#FF6B6B] text-xs block mb-1">{comment.user_id?.username}</span>
             <p className="text-sm text-gray-700 leading-relaxed">{comment.text}</p>
             
-            {/* Moderator/Owner Delete Button for Comments */}
-            {(isCommentOwner || isModerator) && (
+            {(isCommentOwner || isGlobalMod) && (
               <button 
                 onClick={() => onDelete(comment._id)}
                 className="absolute top-2 right-2 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
@@ -52,15 +51,25 @@ const ThreadedComment = ({ comment, depth = 0, onReply, onDelete, currentUser })
   );
 };
 
+// PostCard
 const PostCard = ({ post }) => {
   const navigate = useNavigate();
   const { user } = useAuth(); 
   
+  // 1. Triple-Check Ownership
   const authId = user?._id || user?.id;
   const authorId = post.user_id?._id || post.user_id;
-  const isOwner = authId === authorId;
-  const isModerator = user?.role === 'moderator' || user?.role === 'admin';
+  const isOwner = authId && authorId && authId.toString() === authorId.toString();
+  
+  // 2. Safely Check Community Moderator Status
+  const isCommunityMod = Array.isArray(post.comm_id?.moderators) 
+    ? post.comm_id.moderators.some(modId => modId.toString() === authId?.toString())
+    : false;
+    
+  const isAdmin = user?.role === 'admin';
+  const canModerate = isOwner || isCommunityMod || isAdmin;
 
+  // States
   const [votes, setVotes] = useState(post.vote_count || 0);
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
@@ -100,9 +109,12 @@ const PostCard = ({ post }) => {
   const handleCommentDelete = async (commentId) => {
     if (window.confirm("Delete this comment?")) {
       try {
-        const res = await api.delete(`/comments/${commentId}`);
+        // UPDATE THIS LINE to match the new backend route:
+        const res = await api.delete(`/posts/comment/${commentId}`);
         if (res.data.success) fetchComments();
-      } catch (err) { alert("Failed to delete comment"); }
+      } catch (err) { 
+        alert("Failed to delete comment"); 
+      }
     }
   };
 
@@ -139,7 +151,7 @@ const PostCard = ({ post }) => {
   };
 
   const handleDelete = async () => {
-    const message = isModerator && !isOwner 
+    const message = canModerate && !isOwner 
       ? "MODERATOR ACTION: Delete this post permanently?" 
       : "Are you sure you want to delete this post?";
     
@@ -185,7 +197,7 @@ const PostCard = ({ post }) => {
         </div>
 
         {/* MODERATOR / OWNER OPTIONS */}
-        {(isOwner || isModerator) && (
+        {canModerate && (
           <div className="relative">
             <button onClick={() => setShowDropdown(!showDropdown)} className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-50 transition">
               <FiMoreVertical />
@@ -201,7 +213,7 @@ const PostCard = ({ post }) => {
                     <FiEdit2 className="text-gray-400"/> Edit Post
                   </button>
                 )}
-                {isModerator && (
+                {(isCommunityMod || isAdmin) && (
                   <button 
                     onClick={handlePin} 
                     className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
@@ -214,7 +226,7 @@ const PostCard = ({ post }) => {
                   onClick={handleDelete} 
                   className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
                 >
-                  <FiTrash2 className="text-red-400"/> {isModerator && !isOwner ? 'Remove Post' : 'Delete Post'}
+                  <FiTrash2 className="text-red-400"/> {(isCommunityMod || isAdmin) && !isOwner ? 'Remove Post' : 'Delete Post'}
                 </button>
               </div>
             )}
