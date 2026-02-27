@@ -57,10 +57,10 @@ Citizens performing sustainable actions (waste reduction, renewable energy adopt
 ## Software Design
 
 ### Architecture & Diagrams
-* **[High-Level Architecture](docs/design/architecture.png)**
-* **[Database Schema (ERD)](docs/design/database_schema.png)**
-* **[AI Scoring Flow (Sequence Diagram)](docs/design/sequence_diagram.png)**
-* **[UI/UX Figma Designs](https://www.figma.com/design/BQOzlXTuImqG5lFkHT2ZcD/Pulse-Social-Media-System?node-id=0-1&t=juVVvsAdqPwLLi7y-1)**
+* **[High-Level Architecture](docs/design/Architecture_diagrams)**
+* **[Database Schema (ERD)](docs/design/UML_diagrams/er.pdf)**
+* **[Other UML Diagrams](docs/design/UML_diagrams)**
+* **[UI/UX Figma Designs](https://www.figma.com/design/BQOzlXTuImqG5lFkHT2ZcD/Pulse-Social-Media-System?node-id=0-1&t=1x1Ou3rL0rElL0dx-1)**
 
 ### Design Choices Summary
 The Pulse platform uses a Hybrid architecture that combines a MVC pattern with dockerized microservices. This setup ensures high maintainability and independent scalability. The React frontend (View) is clearly separated from the Node.js backend (Controller/Model). Heavy computational tasks run in a dedicated Python AI microservice. This strict separation of concerns lets the platform handle complex machine learning inferences without interfering with the main web server's event loop.
@@ -378,6 +378,7 @@ This project is licensed under the MIT License - see LICENSE file for details.
 
 ---
 [UN SDG Goals](https://sdgs.un.org/goals)
+
 
 
 
