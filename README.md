@@ -53,6 +53,17 @@ Citizens performing sustainable actions (waste reduction, renewable energy adopt
 - **AI Service**: Python/FastAPI microservice for SDG classification
 - **Storage**: AWS S3 for image/media uploads
 - **Deployment**: Dockerized services with Docker Compose
+  
+## Software Design
+
+### Architecture & Diagrams
+* **[High-Level Architecture](docs/design/architecture.png)**
+* **[Database Schema (ERD)](docs/design/database_schema.png)**
+* **[AI Scoring Flow (Sequence Diagram)](docs/design/sequence_diagram.png)**
+* **[UI/UX Figma Designs](https://www.figma.com/design/BQOzlXTuImqG5lFkHT2ZcD/Pulse-Social-Media-System?node-id=0-1&t=juVVvsAdqPwLLi7y-1)**
+
+### Design Choices Summary
+The Pulse platform uses a Hybrid architecture that combines a MVC pattern with dockerized microservices. This setup ensures high maintainability and independent scalability. The React frontend (View) is clearly separated from the Node.js backend (Controller/Model). Heavy computational tasks run in a dedicated Python AI microservice. This strict separation of concerns lets the platform handle complex machine learning inferences without interfering with the main web server's event loop.
 
 ## Success Metrics
 
@@ -92,7 +103,7 @@ Citizens performing sustainable actions (waste reduction, renewable energy adopt
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 pulse/
@@ -132,7 +143,7 @@ pulse/
 
 ---
 
-## 🔧 Branching Strategy
+## Branching Strategy
 
 We follow **GitHub Flow** for this project.
 
@@ -184,7 +195,7 @@ git push origin feature/6-create-post
 
 ---
 
-## 🚀 Quick Start – Local Development
+## Quick Start – Local Development
 
 ### Prerequisites
 - **Node.js** 18+ ([Download](https://nodejs.org/))
@@ -194,7 +205,7 @@ git push origin feature/6-create-post
 
 ---
 
-### Option 1: Docker Compose 🐳
+### Option 1: Docker Compose 
 
 **Step 1: Clone the repository**
 ```bash
@@ -275,7 +286,7 @@ npm run dev
 
 ---
 
-## 🐳 Docker Commands Reference
+## Docker Commands Reference
 
 ### Build individual services
 ```bash
@@ -305,7 +316,7 @@ docker exec -it pulse-ai-service-1 bash
 
 ---
 
-## 🛠️ Local Development Tools
+## Local Development Tools
 
 | Tool | Version | Purpose |
 |------|---------|---------|
@@ -328,7 +339,7 @@ docker exec -it pulse-ai-service-1 bash
 
 ---
 
-## 🧪 Testing the Setup
+## Testing the Setup
 
 ### 1. Test Backend API
 ```bash
@@ -355,18 +366,19 @@ Open browser: `http://localhost:5173`
 
 ---
 
-## 👥 Contributors
+## Contributors
 
 - Pragya Sekar
   
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see LICENSE file for details.
 
 ---
 [UN SDG Goals](https://sdgs.un.org/goals)
+
 
 
 
