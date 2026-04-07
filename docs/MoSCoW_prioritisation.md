@@ -1,6 +1,6 @@
 # MoSCoW Prioritization - Pulse Social Media Platform
 
-## Must Have (Critical for Release 1.0) 🔴
+## Must Have (Critical for Release 1.0) 
 
 These features are absolutely essential and non-negotiable for the MVP to function.
 
@@ -25,7 +25,7 @@ These features are absolutely essential and non-negotiable for the MVP to functi
 
 ---
 
-## Should Have (Important but not blocking) 🟠
+## Should Have (Important but not blocking) 
 
 These features enhance user experience significantly but the MVP can launch without them.
 
@@ -44,7 +44,7 @@ These features enhance user experience significantly but the MVP can launch with
 
 ---
 
-## Could Have (Nice to have if time permits) 🟡
+## Could Have (Nice to have if time permits) 
 
 Desirable features that add value but can wait for future releases.
 
@@ -58,7 +58,7 @@ Desirable features that add value but can wait for future releases.
 
 ---
 
-## Won't Have (Future releases) ⚪
+## Won't Have (Future releases) 
 
 Features explicitly excluded from Release 1.0 per project scope and timeline constraints.
 
